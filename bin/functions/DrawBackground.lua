@@ -1,3 +1,5 @@
+-- Draws background image
+
 function drawBackground()
 i = 0
 	while i <= love.window.getHeight() do

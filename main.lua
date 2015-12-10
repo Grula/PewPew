@@ -10,10 +10,13 @@ TODO:
 	- Ammo
 ]]
 
-require("bin.functions.RestartGame")	 -- Function for restarting game
-require("bin.functions.Score")			 -- Function for Score/HighScore
-require("bin.functions.DrawBackground")	 -- Function for drawing Background
-require("bin.functions.PowerUp") 		 -- Function for making PowerUps
+require("bin.functions.RestartGame")	 -- Function for restarting game 		----
+require("bin.functions.Score")			 -- Function for Score/HighScore 		----
+require("bin.functions.DrawBackground")	 -- Function for drawing Background 	----
+require("bin.functions.PowerUp") 		 -- Function for making PowerUps 		TODO
+require("bin.functions.Audio")			 -- Function for loading Audio files	----
+require("bin.functions.Images")			 -- Function for lading Images 			----
+require("bin.functions.Level")			 -- Function for changing Levels 		TODO
 
 
 isAlive = true
@@ -40,14 +43,15 @@ createEnemyTimer = createEnemyTimerMax
 bulletImg = nil
 enemyImg = nil 
 
-backgroundImg1 = nil
-backgroundImg2 = nil
+backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
+-- backgroundImg1 = nil
+-- backgroundImg2 = nil
 powerUpImg = nil
 
 -- Configs
 isToDie = true	   -- Checks if player can die
 scoreUpdate = true -- Determinates when score needs to be updated at the end of game
-Highscore = 0	   -- HighScore loaded from  
+Highscore = nil	   -- HighScore loaded from  
 SCORE = 0		   -- FINAL score at the end of game
 
 dificulty = 200    -- speed of what aircrafts are moving
@@ -57,52 +61,28 @@ nextLevel = true   -- level changes can occure only once
 scoreUp = 0		   -- calculates when we reach 30 points
 changeLevel = 30   -- level change on evenry 30 points 
 
+
 -- PRELOADING ----------------------------------------
 function love.load(arg)
+	-- Loads CONFIGS
 	Highscore = LoadHighscore()
+	if( Highscore ~= nil) then
+		print("Highscore loaded")
+	end
 	-- LOADING CUSTOM FONT ---------------------------
 	font = love.graphics.setNewFont( "bin/KenVector Future Thin.ttf", 14 )
-	
 	--------------------------------------------------
 
 
-	-- AUDIO FILES -----------------------------------
-	gameSounds = {	'assets/sound/Music/Retro Mystic.ogg',
-					'assets/sound/Music/Retro Beat.ogg',
-					'assets/sound/Music/Retro Reggae.ogg' }
-	
+	-- Loads Audio files
+	if loadAudio() then
+		print("Audio loaded")
+	end
 
-	powerUpSound = love.audio.newSource('assets/sound/powerUp7.ogg')
-	pewPewGameSound = love.audio.newSource(gameSounds[1])
-	pewPewGameSound:setLooping()
-	pewPewGameSound:setVolume(0.5)
-	bulletSound = love.audio.newSource('assets/sound/laser4.ogg')
-	bulletSound:setVolume(1)
-	gameOverSound = love.audio.newSource( 'assets/sound/game_over.ogg' )
-	gameOverSound:setVolume(0.6)
-	newHighScoreSound = love.audio.newSource('assets/sound/new_highscore.ogg')
-	newHighScoreSound:setVolume(0.6)
-
-	--------------------------------------------------
-
-
-	-- Storing PowerUPsImg in one array ------------------------------------------------
-	powerUpsImg = {
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupGreen_bolt.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupBlue_star.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupRed_shield.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/things_gold.png')}
-	---------------------------------------------------------------------------------
-
-
-
-	--print(Highscore)
-	--C:\Users\grula\Desktop\Uni\Projects\LUA\projects\Pew Pew\assets\Space Shooter\PNG
-	enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyGreen1.png')
-    player.img = love.graphics.newImage('assets/Space Shooter/PNG/playerShip1_blue.png')
-    bulletImg = love.graphics.newImage('assets/Space Shooter/PNG/Lasers/laserBlue01.png')
-    backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
-
+	-- Loading Images
+	if loadImages() then
+		print("Images loaded")
+	end
 end
 
 
@@ -111,8 +91,7 @@ function love.update(dt)
 	pewPewGameSound:play()
 	--print(love.timer.getFPS())
 
-	-- KEYBOARD EVENETS ---------------------------------
-	
+	-- KEYBOARD EVENETS ---------------------------------	
 	if love.keyboard.isDown('escape') then
 		love.event.push('quit')
 	end
@@ -201,7 +180,14 @@ function love.draw(dt)
 	-- Drawing Background Image -------------------------
 	drawBackground()
 	-----------------------------------------------------
+
 	-- BACKGROUND IMAGE/ANIMATION------------------------
+	
+	-- changeLevel(level,nextLevel)
+	-- if changeLevel(level,nextLevel) then
+	-- 	print("Level changed")
+	-- end
+	
 	if level == 0 then
 		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
 	-- Level setting 
@@ -374,3 +360,25 @@ function CreateEnemy( dt )
 		end
 	end	
 end
+
+
+-- SCORE ------------------------------------------------------------------
+function WriteHighscore( score )
+	--bin/highscore/
+	local file =assert(io.open("bin/highscore/highscore.txt","w"),"Error while opening file :(")
+	file:write(score)
+	file:close()
+	return true
+end	
+function LoadHighscore()
+	--C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/
+	local file =assert(io.open("C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/bin/highscore/highscore.txt","r"),"Error while opening file :(")
+	local line = file:read()
+	file:close()
+	if line ~= nil then
+		return tonumber(line)
+	else
+		return 0
+	end
+end
+-----------------------------------------------------------------------
