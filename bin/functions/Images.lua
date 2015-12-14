@@ -12,7 +12,7 @@ function loadImages()
 		love.graphics.newImage('assets/Space Shooter/Backgrounds/purple.png'),
 		love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png'),
 	}
-	enemyImges = {
+	imagesEnemies = {
 		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyGreen1.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack1.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
@@ -31,7 +31,7 @@ function loadImages()
 	}
 	--print(Highscore)
 	--C:\Users\grula\Desktop\Uni\Projects\LUA\projects\Pew Pew\assets\Space Shooter\PNG
-	enemyImg = enemyImges[1] 
+	enemyImg = imagesEnemies[1] 
     player.img = imagesPlayerBasic[2]
     player.bullet = imagesBulletBasic[2]
     backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')

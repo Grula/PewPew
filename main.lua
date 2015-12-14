@@ -14,20 +14,24 @@ TODO:
 	random pattern
 ]]
 
-require("bin.functions.RestartGame")	 -- Function for restarting game 		----
+require("bin.functions.RestartGame")	 -- Function for restarting game 		TODO
 require("bin.functions.Score")			 -- Function for Score/HighScore 		----
 require("bin.functions.DrawBackground")	 -- Function for drawing Background 	----
 require("bin.functions.PowerUp") 		 -- Function for making PowerUps 		TODO
-require("bin.functions.Audio")			 -- Function for loading Audio files	----
-require("bin.functions.Images")			 -- Function for lading Images 			----
+require("bin.functions.Audio")			 -- Function for loading Audio files	ADD-
+require("bin.functions.Images")			 -- Function for lading Images 			ADD-
 require("bin.functions.Level")			 -- Function for changing Levels 		TODO
 --require("bin.functions.Variables")
 
-isAlive = true
+--isAlive = true
 score = 0
 
 -- ENTETIES 
-player = { x = 200, y = 690, speed = 250, img = nil, bullet = nil, life = 3 }
+player = { x = 200, y = 690,
+		   speed = 250,
+		   img = nil, bullet = nil,
+		   life = 3 
+		 }
 
 
 activeEnemiesOnScreen = {} -- array of current activeEnemiesOnScreen on screen
@@ -36,7 +40,7 @@ activePowerupOnScreen = {} -- array of current powerups
 
 
 
--- TIMERS
+-- CONSTANTS
 SHOOT_TIMER = 0.5
 ENEMY_TIMER = 0.8
 SCORE = 0 			-- FINAL score at the end of game
@@ -56,7 +60,7 @@ highscore = nil	   -- HighScore loaded from
 		   
 
 enemySpeed = 200    -- speed of what aircrafts are moving
-level = 0          -- cuurent level
+level = 1	       -- cuurent level
 nextLevel = true   -- level changes can occure only once
 
 scoreUp = 0		   -- calculates when we reach 30 points
@@ -72,6 +76,8 @@ function love.load(arg)
 	highscore = LoadHighscore()
 	if( highscore ~= nil) then
 		print("highscore loaded")
+	else
+		highscore = 0
 	end
 	-- LOADING CUSTOM FONT ---------------------------
 	font = love.graphics.setNewFont( "bin/KenVector Future Thin.ttf", 14 )
@@ -111,9 +117,11 @@ function love.update(dt)
 	if love.keyboard.isDown(' ', 'rctrl', 'lctrl', 'ctrl') and canShootCheck and (player.life > 0) then
 		newBullet = { x = player.x + (player.img:getWidth()/2 - 5), y = player.y - 50, img = player.bullet } 
 		table.insert(activeBulletsOnScreen, newBullet)
+
 		if	bulletSound:isPlaying() then
 			bulletSound:stop()
 		end
+
 		bulletSound:play()
 		canShootCheck = false
 		canShootTimer = canShootTimerMax
@@ -132,24 +140,25 @@ function love.update(dt)
 ---
 
 
-	if level == 0 then
+	if level == 1 then
 		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
+		--enemyImg = imagesEnemies[3]
 	-- Level setting 
-	elseif level == 1 and nextLevel then
+	elseif level == 2 and nextLevel then
 		canShootTimerMax = canShootTimerMax - 0.05
 		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/purple.png')
 		nextLevel = false
 		activeEnemiesOnScreen = {}
-		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack1.png')
+		enemyImg = imagesEnemies[level]
 		enemySpeed = 250
-	elseif level == 2 and not nextLevel then
+	elseif level == 3 and not nextLevel then
 		canShootTimerMax = canShootTimerMax - 0.05
 		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png')
 		nextLevel = true
 		activeEnemiesOnScreen = {}
 		enemySpeed = 300
 		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
-	elseif level == 3 then
+	elseif level == 4 then
 		-- code
 	end
 
@@ -338,11 +347,10 @@ function CreateEnemy( dt )
 	createEnemyTimer = createEnemyTimer - (1 * dt)
 	if createEnemyTimer < 0 then
 		createEnemyTimer = createEnemyTimerMax
-		-- Create an enemy
 		randomNumber = math.random(10, love.graphics.getWidth() - enemyImg:getWidth() - 10)
 		-- enemy life represents current hitpoits they can take from player, 
-		-- showed in lievel
-		newEnemy = { x = randomNumber, y = -10, img = enemyImg, life = level }
+		-- showed in current level (exp. level = 3 , enemy can take 3 hits)
+		newEnemy = { x = randomNumber, y = -10, img = enemyImg, life = level - 1}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
 	-- update the positions of activeEnemiesOnScreen
