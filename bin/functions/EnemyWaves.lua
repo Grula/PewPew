@@ -1,7 +1,15 @@
 function EnemyWaveOne(dt)
+
+	-- *
+	-- 		*
+	-- *
+	-- 		*
+	-- *
+	-- 		*
+
 	local startingPosXone = love.window.getWidth()/4
 	local startingPosXtwo = love.window.getWidth()/2 + 50
-	local startingPosY = - 10
+	local startingPosY = - 60
 	local odd = true
 	local x = 1
 
@@ -59,7 +67,7 @@ end
 
 function EnemyWaveTwo(dt)
 	local startingPosX = 20
-	local startingPosY = - 10
+	local startingPosY = - 60
 	local trio = 3
 
 	local enemyCount = 5
@@ -83,6 +91,37 @@ function EnemyWaveTwo(dt)
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
 	enemyCount = 5
+	return enemyCount
+end
+
+function EnemyWaveThree(dt)
+	local startingPosXone = love.window.getWidth()/2 - enemyImg:getWidth() - 40
+	local startingPosXtwo = love.window.getWidth()/2 + enemyImg:getWidth() - 40
+	local startingPosY = - 60
+	local trio = 3
+
+	local enemyCount = 6
+
+	while enemyCount > 0 do
+		enemyCount = enemyCount - 2
+
+
+		newEnemy = { x = startingPosXone, y = startingPosY,
+					 img = enemyImg, life = level - 1}
+		table.insert(activeEnemiesOnScreen, newEnemy)
+		newEnemy = { x = startingPosXtwo, y = startingPosY,
+					 img = enemyImg, life = level - 1}
+		table.insert(activeEnemiesOnScreen, newEnemy)
+		
+		startingPosXone = startingPosXone - enemyImg:getWidth()/2 + 20  
+		startingPosXtwo = startingPosXtwo + enemyImg:getWidth()/2 - 20
+
+		startingPosY = startingPosY - 150
+
+
+		
+	end
+	enemyCount = 6
 	return enemyCount
 end
 

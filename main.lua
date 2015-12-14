@@ -40,7 +40,7 @@ activePowerupOnScreen = {} -- array of current powerups
 
 currentEnemiesAlive = 0
 currentWaveCount = 0
-enemyWaves = { EnemyWaveOne,EnemyWaveTwo}
+enemyWaves = { EnemyWaveOne,EnemyWaveTwo,EnemyWaveThree}
 
 -- CONSTANTS
 SHOOT_TIMER = 0.5
@@ -56,17 +56,15 @@ createEnemyTimerMax = ENEMY_TIMER
 createEnemyTimer = createEnemyTimerMax
 
 -- Configs
-isAlive = true	   -- Checks if player can die
+isAlive = true	   -- Checks if player is alive
 scoreUpdate = true -- Determinates when score needs to be updated at the end of game
-highscore = nil	   -- HighScore loaded from  
+highscore = nil	   -- HighScore loaded from  file
 		   
 
 enemySpeed = 200    -- speed of what aircrafts are moving
 level = 1	       -- cuurent level
 nextLevel = true   -- level changes can occure only once
 
-scoreUp = 0		   -- calculates when we reach 30 points
-changeLevel = 30   -- level change on evenry 30 points 
 
 POSX = 50
 enemyCount = 0
@@ -129,17 +127,6 @@ function love.update(dt)
 		canShootTimer = canShootTimerMax
 	end
 	-----------------------------------------------------
-
-
----
-	-- backgroundImg,nextLevel,canShootTimerMax,activeEnemiesOnScreen,enemyImg,enemySpeed = changeLevel()
-
-	-- if nextLevel then
-	-- 	nextLevel = false
-	-- else
-	-- 	nextLevel = true
-	-- end
----
 
 
 	if level == 1 then
@@ -261,19 +248,11 @@ end
 
 
 function IncreseDif()
-	if currentWaveCount > 3 then
+	if currentWaveCount > 5 then
 		level = level + 1
-		enemySpeed = enemySpeed + 25
+		enemySpeed = enemySpeed + 35
 		currentWaveCount = 0
 	end
-	-- if score >= (scoreUp + 10 ) then
-	-- 	scoreUp = scoreUp + 10 -- 10
-	-- 	enemySpeed = enemySpeed + 50
-	-- 	if scoreUp >= changeLevel then
-	-- 		changeLevel = changeLevel + 30 -- 30
-	-- 		level = level + 1
-	-- 	end
-	-- end
 end
 
 -- Timer to be able to shooooooooooooooooooot pewpew -------------------------------------------------------------------------------------------------------------
@@ -353,7 +332,7 @@ end
 function CreateEnemy( dt )
 
 	if currentEnemiesAlive <= 0 then
-		i = math.random(1,2)
+		i = math.random(1,3)
 		currentEnemiesAlive = enemyWaves[i]()
 		-- currentEnemiesAlive = EnemyWaveTwo()
 		--currentEnemiesAlive = 6

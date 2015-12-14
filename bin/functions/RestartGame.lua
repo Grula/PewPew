@@ -21,5 +21,4 @@ function restartGame()
 	scoreUp = 0
 	changeLevel = 30
 	level = 0
-	powers = {}
-end
+end	powers = {}
