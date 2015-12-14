@@ -32,8 +32,8 @@ function loadImages()
 	--print(Highscore)
 	--C:\Users\grula\Desktop\Uni\Projects\LUA\projects\Pew Pew\assets\Space Shooter\PNG
 	enemyImg = enemyImges[1] 
-    player.img = imagesPlayerBasic[3]
-    player.bullet = imagesBulletBasic[3]
+    player.img = imagesPlayerBasic[2]
+    player.bullet = imagesBulletBasic[2]
     backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
     return true
 end

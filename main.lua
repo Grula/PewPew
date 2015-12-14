@@ -302,7 +302,6 @@ function CheckCollisionOfAllEnteties( ... )
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) then
 			table.remove(activePowerupOnScreen,i)
 			powerUpSound:play()
-			player.img = love.graphics.newImage('assets/Space Shooter/PNG/playerShip2_green.png')
 		end
 	end
 end
