@@ -14,7 +14,7 @@ function restartGame()
 	backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
 	
 	score = 0
-	isToDie = true
+	isAlive = true
 	player.life = 3
 	scoreUpdate = true
 

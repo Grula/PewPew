@@ -22,8 +22,8 @@ require("bin.functions.Audio")			 -- Function for loading Audio files	ADD-
 require("bin.functions.Images")			 -- Function for lading Images 			ADD-
 require("bin.functions.Level")			 -- Function for changing Levels 		TODO
 --require("bin.functions.Variables")
+require("bin.functions.EnemyWaves")
 
---isAlive = true
 score = 0
 
 -- ENTETIES 
@@ -38,7 +38,9 @@ activeEnemiesOnScreen = {} -- array of current activeEnemiesOnScreen on screen
 activeBulletsOnScreen = {} -- array of current activeBulletsOnScreen being drawn and updated
 activePowerupOnScreen = {} -- array of current powerups
 
-
+currentEnemiesAlive = 0
+currentWaveCount = 0
+enemyWaves = { EnemyWaveOne,EnemyWaveTwo}
 
 -- CONSTANTS
 SHOOT_TIMER = 0.5
@@ -54,7 +56,7 @@ createEnemyTimerMax = ENEMY_TIMER
 createEnemyTimer = createEnemyTimerMax
 
 -- Configs
-isToDie = true	   -- Checks if player can die
+isAlive = true	   -- Checks if player can die
 scoreUpdate = true -- Determinates when score needs to be updated at the end of game
 highscore = nil	   -- HighScore loaded from  
 		   
@@ -145,18 +147,16 @@ function love.update(dt)
 		--enemyImg = imagesEnemies[3]
 	-- Level setting 
 	elseif level == 2 and nextLevel then
-		canShootTimerMax = canShootTimerMax - 0.05
 		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/purple.png')
 		nextLevel = false
+		currentEnemiesAlive = 0
 		activeEnemiesOnScreen = {}
 		enemyImg = imagesEnemies[level]
-		enemySpeed = 250
 	elseif level == 3 and not nextLevel then
-		canShootTimerMax = canShootTimerMax - 0.05
 		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png')
 		nextLevel = true
+		currentEnemiesAlive = 0
 		activeEnemiesOnScreen = {}
-		enemySpeed = 300
 		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
 	elseif level == 4 then
 		-- code
@@ -194,12 +194,11 @@ function love.update(dt)
 
 
 	-- GAME RESTART ----------------------------------------
-	if (player.life == 0) and isToDie then
+	if (player.life == 0) and isAlive then
 		if score < highscore then
 			gameOverSound:play()
 		end
-		isToDie = false
-		--activeEnemiesOnScreen = {}
+		isAlive = false
 		activeBulletsOnScreen = {}
 	end
 	if (player.life == 0) and love.keyboard.isDown('r') then
@@ -262,14 +261,19 @@ end
 
 
 function IncreseDif()
-	if score >= (scoreUp + 10 ) then
-		scoreUp = scoreUp + 10 -- 10
-		enemySpeed = enemySpeed + 50
-		if scoreUp >= changeLevel then
-			changeLevel = changeLevel + 30 -- 30
-			level = level + 1
-		end
+	if currentWaveCount > 3 then
+		level = level + 1
+		enemySpeed = enemySpeed + 25
+		currentWaveCount = 0
 	end
+	-- if score >= (scoreUp + 10 ) then
+	-- 	scoreUp = scoreUp + 10 -- 10
+	-- 	enemySpeed = enemySpeed + 50
+	-- 	if scoreUp >= changeLevel then
+	-- 		changeLevel = changeLevel + 30 -- 30
+	-- 		level = level + 1
+	-- 	end
+	-- end
 end
 
 -- Timer to be able to shooooooooooooooooooot pewpew -------------------------------------------------------------------------------------------------------------
@@ -290,6 +294,7 @@ function CheckCollisionOfAllEnteties( ... )
 			if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth() , enemy.img:getHeight(), 
 							  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
 				if enemy.life <= 0 then
+					currentEnemiesAlive = currentEnemiesAlive - 1
 					table.remove(activeEnemiesOnScreen, i)
 					score = score + 1
 				else
@@ -302,6 +307,7 @@ function CheckCollisionOfAllEnteties( ... )
 		if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
 		and (player.life > 0) then
+			currentEnemiesAlive = currentEnemiesAlive - 1
 			table.remove(activeEnemiesOnScreen, i)
 			player.life = player.life - 1
 		end
@@ -342,25 +348,28 @@ function CheckBullets(dt)
 	end
 end
 
+
+
 function CreateEnemy( dt )
 
-	createEnemyTimer = createEnemyTimer - (1 * dt)
-	if createEnemyTimer < 0 then
-		createEnemyTimer = createEnemyTimerMax
-		randomNumber = math.random(10, love.graphics.getWidth() - enemyImg:getWidth() - 10)
-		-- enemy life represents current hitpoits they can take from player, 
-		-- showed in current level (exp. level = 3 , enemy can take 3 hits)
-		newEnemy = { x = randomNumber, y = -10, img = enemyImg, life = level - 1}
-		table.insert(activeEnemiesOnScreen, newEnemy)
+	if currentEnemiesAlive <= 0 then
+		i = math.random(1,2)
+		currentEnemiesAlive = enemyWaves[i]()
+		-- currentEnemiesAlive = EnemyWaveTwo()
+		--currentEnemiesAlive = 6
+		currentWaveCount = currentWaveCount + 1
 	end
-	-- update the positions of activeEnemiesOnScreen
+
+
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
 							--lelel CHANGE
 		enemy.y = enemy.y + (enemySpeed * dt)
 		if enemy.y > love.window.getHeight() - enemy.img:getHeight() - 10  then 
 			table.remove(activeEnemiesOnScreen, i)
+			currentEnemiesAlive = currentEnemiesAlive - 1
 		end
 	end	
+
 end
 
 
