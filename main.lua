@@ -4,10 +4,14 @@ debug = true
 TODO:
 	- Lives
 	- Score - DONE
-	- Levels [enemies life increse,music change,background change]
+	- Levels [activeEnemiesOnScreen life increse,music change,background change]
 	- Particles
-	- Highscore - DONE
+	- highscore - DONE
 	- Ammo
+
+
+	funkcije za pomeranje , oko 5-6 njih se biraju random i imaju
+	random pattern
 ]]
 
 require("bin.functions.RestartGame")	 -- Function for restarting game 		----
@@ -17,62 +21,61 @@ require("bin.functions.PowerUp") 		 -- Function for making PowerUps 		TODO
 require("bin.functions.Audio")			 -- Function for loading Audio files	----
 require("bin.functions.Images")			 -- Function for lading Images 			----
 require("bin.functions.Level")			 -- Function for changing Levels 		TODO
-
+--require("bin.functions.Variables")
 
 isAlive = true
 score = 0
-dificulty = 5
 
 -- ENTETIES 
-player = { x = 200, y = 690, speed = 250, img = nil }
-enemies = {} -- array of current enemies on screen
-bullets = {} -- array of current bullets being drawn and updated
-powers = {}  -- array of current powerups
-powerUpsImg = {}-- array of available powerUpsImg
+player = { x = 200, y = 690, speed = 250, img = nil, bullet = nil, life = 3 }
+
+
+activeEnemiesOnScreen = {} -- array of current activeEnemiesOnScreen on screen
+activeBulletsOnScreen = {} -- array of current activeBulletsOnScreen being drawn and updated
+activePowerupOnScreen = {} -- array of current powerups
+
+
 
 -- TIMERS
-canShoot = true
 SHOOT_TIMER = 0.5
+ENEMY_TIMER = 0.8
+SCORE = 0 			-- FINAL score at the end of game
+
+
+canShootCheck = true
 canShootTimerMax = SHOOT_TIMER
 canShootTimer = canShootTimerMax
-ENEMY_TIMER = 0.8
+
 createEnemyTimerMax = ENEMY_TIMER
 createEnemyTimer = createEnemyTimerMax
 
--- Image Storage
-bulletImg = nil
-enemyImg = nil 
-
-backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
--- backgroundImg1 = nil
--- backgroundImg2 = nil
-powerUpImg = nil
 
 -- Configs
 isToDie = true	   -- Checks if player can die
 scoreUpdate = true -- Determinates when score needs to be updated at the end of game
-Highscore = nil	   -- HighScore loaded from  
-SCORE = 0		   -- FINAL score at the end of game
+highscore = nil	   -- HighScore loaded from  
+		   
 
-dificulty = 200    -- speed of what aircrafts are moving
+enemySpeed = 200    -- speed of what aircrafts are moving
 level = 0          -- cuurent level
 nextLevel = true   -- level changes can occure only once
 
 scoreUp = 0		   -- calculates when we reach 30 points
 changeLevel = 30   -- level change on evenry 30 points 
 
+POSX = 50
+enemyCount = 0
 
 -- PRELOADING ----------------------------------------
 function love.load(arg)
 	-- Loads CONFIGS
-	Highscore = LoadHighscore()
-	if( Highscore ~= nil) then
-		print("Highscore loaded")
+	highscore = LoadHighscore()
+	if( highscore ~= nil) then
+		print("highscore loaded")
 	end
 	-- LOADING CUSTOM FONT ---------------------------
 	font = love.graphics.setNewFont( "bin/KenVector Future Thin.ttf", 14 )
 	--------------------------------------------------
-
 
 	-- Loads Audio files
 	if loadAudio() then
@@ -105,27 +108,51 @@ function love.update(dt)
 		end
 	end
 
-	if love.keyboard.isDown(' ', 'rctrl', 'lctrl', 'ctrl') and canShoot and isAlive then
-		newBullet = { x = player.x + (player.img:getWidth()/2 - 5), y = player.y - 50, img = bulletImg } 
-		table.insert(bullets, newBullet)
+	if love.keyboard.isDown(' ', 'rctrl', 'lctrl', 'ctrl') and canShootCheck and (player.life > 0) then
+		newBullet = { x = player.x + (player.img:getWidth()/2 - 5), y = player.y - 50, img = player.bullet } 
+		table.insert(activeBulletsOnScreen, newBullet)
 		if	bulletSound:isPlaying() then
 			bulletSound:stop()
 		end
 		bulletSound:play()
-		canShoot = false
+		canShootCheck = false
 		canShootTimer = canShootTimerMax
 	end
-
-	if love.keyboard.isDown('up','w') then
-		if player.y > 0 then 
-			player.y = player.y - (player.speed*dt)
-		end
-	elseif love.keyboard.isDown('down','s') then
-		if player.y < (love.graphics.getHeight() - player.img:getHeight() - 20 ) then
-			player.y = player.y + (player.speed*dt)
-		end
-	end	
 	-----------------------------------------------------
+
+
+---
+	-- backgroundImg,nextLevel,canShootTimerMax,activeEnemiesOnScreen,enemyImg,enemySpeed = changeLevel()
+
+	-- if nextLevel then
+	-- 	nextLevel = false
+	-- else
+	-- 	nextLevel = true
+	-- end
+---
+
+
+	if level == 0 then
+		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
+	-- Level setting 
+	elseif level == 1 and nextLevel then
+		canShootTimerMax = canShootTimerMax - 0.05
+		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/purple.png')
+		nextLevel = false
+		activeEnemiesOnScreen = {}
+		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack1.png')
+		enemySpeed = 250
+	elseif level == 2 and not nextLevel then
+		canShootTimerMax = canShootTimerMax - 0.05
+		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png')
+		nextLevel = true
+		activeEnemiesOnScreen = {}
+		enemySpeed = 300
+		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
+	elseif level == 3 then
+		-- code
+	end
+
 
 
 	-- LevelChange ---------------------------------------
@@ -158,16 +185,16 @@ function love.update(dt)
 
 
 	-- GAME RESTART ----------------------------------------
-	if not isAlive and isToDie then
-		if score < Highscore then
+	if (player.life == 0) and isToDie then
+		if score < highscore then
 			gameOverSound:play()
 		end
 		isToDie = false
-		enemies = {}
-		bullets = {}
+		--activeEnemiesOnScreen = {}
+		activeBulletsOnScreen = {}
 	end
-	if not isAlive and love.keyboard.isDown('r') then
-		-- remove all bullets and enemies from screen
+	if (player.life == 0) and love.keyboard.isDown('r') then
+		-- remove all activeBulletsOnScreen and activeEnemiesOnScreen from screen
 		restartGame()
 	end
 	-------------------------------------------------------
@@ -181,69 +208,39 @@ function love.draw(dt)
 	drawBackground()
 	-----------------------------------------------------
 
-	-- BACKGROUND IMAGE/ANIMATION------------------------
-	
-	-- changeLevel(level,nextLevel)
-	-- if changeLevel(level,nextLevel) then
-	-- 	print("Level changed")
-	-- end
-	
-	if level == 0 then
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
-	-- Level setting 
-	elseif level == 1 and nextLevel then
-		canShootTimerMax = canShootTimerMax - 0.05
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/purple.png')
-		nextLevel = false
-		enemies = {}
-		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack1.png')
-		dificulty = 250
-	elseif level == 2 and not nextLevel then
-		canShootTimerMax = canShootTimerMax - 0.05
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png')
-		nextLevel = true
-		enemies = {}
-		dificulty = 300
-		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
-	elseif level == 3 then
-		-- code
-	end
-
-	-----------------------------------------------------
-
 
 	-- DRAWING PLAYER IF HE IS ALIVE AND SHOWING SCORE---
 	-- life is missing
-    if isAlive then
+    if (player.life > 0) then
 		love.graphics.draw(player.img, player.x, player.y)
 		love.graphics.print("Score :"..score.." ",0,love.graphics:getHeight()-15)
-		love.graphics.print("Highscore: " .. Highscore .. " ",love.graphics:getWidth()-125,love.graphics:getHeight()-15)
+		love.graphics.print("highscore: " .. highscore .. " ",love.graphics:getWidth()-125,love.graphics:getHeight()-15)
 	else
-		CheckScore(scoreUpdate)
+		CheckScore()
 		love.graphics.print("Press 'R' to restart", love.graphics:getWidth()/2-75, love.graphics:getHeight()/2-10)
 		love.graphics.print("Score :"..SCORE.." ",0,love.graphics:getHeight()-15)
-		love.graphics.print("Highscore: " .. Highscore .. " ",love.graphics:getWidth()-125,love.graphics:getHeight()-15)
+		love.graphics.print("highscore: " .. highscore .. " ",love.graphics:getWidth()-125,love.graphics:getHeight()-15)
 	end
 	-----------------------------------------------------
 	
 
 	-- DRAWING POWERUPSImg ---------------------------------
-	for i,powerUp in ipairs(powers) do
+	for i,powerUp in ipairs(activePowerupOnScreen) do
 		love.graphics.draw(powerUp.img,powerUp.x,powerUp.y)
 	end
 
 	-----------------------------------------------------
 
 	-- DRAWING BULLETS AND PARTICLES---------------------
-	for i, bullet in ipairs(bullets) do
-		love.graphics.draw(bullet.img, bullet.x, bullet.y)
+	for i, bullet in ipairs(activeBulletsOnScreen) do
+		love.graphics.draw(player.bullet, bullet.x, bullet.y)
 	end
 
 	-----------------------------------------------------
 
 
 	-- DRAWING ENEMIES ----------------------------------
-	for i, enemy in ipairs(enemies) do
+	for i, enemy in ipairs(activeEnemiesOnScreen) do
 		love.graphics.draw(enemy.img, enemy.x, enemy.y)
 	end
 	-----------------------------------------------------
@@ -255,12 +252,11 @@ end
 --***************************************************************************************************************************************************************
 
 
-
 function IncreseDif()
 	if score >= (scoreUp + 10 ) then
 		scoreUp = scoreUp + 10 -- 10
-		dificulty = dificulty + 50
-		if scoreUp == changeLevel then
+		enemySpeed = enemySpeed + 50
+		if scoreUp >= changeLevel then
 			changeLevel = changeLevel + 30 -- 30
 			level = level + 1
 		end
@@ -271,7 +267,7 @@ end
 function ChecksShootTimer( dt )
 	canShootTimer = canShootTimer - (1 * dt)
 	if canShootTimer < 0 then
-	  canShoot = true
+	  canShootCheck = true
 	end
 end
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -280,31 +276,31 @@ end
 -- Checking colision ----------------------------------------------------------------------------------------------------------------------------------------------
 function CheckCollisionOfAllEnteties( ... )
 	-- If 2 enteties are coliding we are removing them
-	for i, enemy in ipairs(enemies) do
-		for j, bullet in ipairs(bullets) do
+	for i, enemy in ipairs(activeEnemiesOnScreen) do
+		for j, bullet in ipairs(activeBulletsOnScreen) do
 			if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth() , enemy.img:getHeight(), 
 							  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
 				if enemy.life <= 0 then
-					table.remove(enemies, i)
+					table.remove(activeEnemiesOnScreen, i)
 					score = score + 1
 				else
 					enemy.life = enemy.life - 1
 				end
-				table.remove(bullets, j)
+				table.remove(activeBulletsOnScreen, j)
 			end
 		end
 
 		if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
-		and isAlive then
-			table.remove(enemies, i)
-			isAlive = false
+		and (player.life > 0) then
+			table.remove(activeEnemiesOnScreen, i)
+			player.life = player.life - 1
 		end
 	end
-	for i,powerUp in ipairs(powers) do
+	for i,powerUp in ipairs(activePowerupOnScreen) do
 		if CheckCollision(powerUp.x,powerUp.y,powerUp.img:getWidth(),powerUp.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) then
-			table.remove(powers,i)
+			table.remove(activePowerupOnScreen,i)
 			powerUpSound:play()
 			player.img = love.graphics.newImage('assets/Space Shooter/PNG/playerShip2_green.png')
 		end
@@ -329,16 +325,17 @@ end
 -- DESTROY/CREATE enteties -------------------------------------------------------------------------------------------------------------------------------
 
 function CheckBullets(dt)
-	for i, bullet in ipairs(bullets) do
+	for i, bullet in ipairs(activeBulletsOnScreen) do
 		bullet.y = bullet.y - (250 * dt)
-	  	-- remove bullets when they pass off the screen	
+	  	-- remove activeBulletsOnScreen when they pass off the screen	
 	  	if bullet.y < 0 then 
-			table.remove(bullets, i)
+			table.remove(activeBulletsOnScreen, i)
 		end
 	end
 end
 
 function CreateEnemy( dt )
+
 	createEnemyTimer = createEnemyTimer - (1 * dt)
 	if createEnemyTimer < 0 then
 		createEnemyTimer = createEnemyTimerMax
@@ -347,25 +344,26 @@ function CreateEnemy( dt )
 		-- enemy life represents current hitpoits they can take from player, 
 		-- showed in lievel
 		newEnemy = { x = randomNumber, y = -10, img = enemyImg, life = level }
-		table.insert(enemies, newEnemy)
+		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
-	-- update the positions of enemies
-	for i, enemy in ipairs(enemies) do
+	-- update the positions of activeEnemiesOnScreen
+	for i, enemy in ipairs(activeEnemiesOnScreen) do
 							--lelel CHANGE
-		-- enemy.y = enemy.y + (200 * dt)
-		enemy.y = enemy.y + (dificulty * dt)
-		-- remove enemies when they pass off the screen
+		enemy.y = enemy.y + (enemySpeed * dt)
 		if enemy.y > love.window.getHeight() - enemy.img:getHeight() - 10  then 
-			table.remove(enemies, i)
+			table.remove(activeEnemiesOnScreen, i)
 		end
 	end	
 end
 
 
+
+
+
 -- SCORE ------------------------------------------------------------------
 function WriteHighscore( score )
 	--bin/highscore/
-	local file =assert(io.open("bin/highscore/highscore.txt","w"),"Error while opening file :(")
+	local file =assert(io.open("bin\\highscore\\highscore.txt","w"),"Error while opening file :(")
 	file:write(score)
 	file:close()
 	return true

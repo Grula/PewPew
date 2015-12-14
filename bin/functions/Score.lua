@@ -2,9 +2,9 @@ function CheckScore()
 	if scoreUpdate then
 		SCORE = score
 		-- Updateing highscore
-		if SCORE > Highscore then
+		if SCORE > highscore then
 			newHighScoreSound:play()
-			Highscore = SCORE
+			highscore = SCORE
 			if WriteHighscore(SCORE) then
 				print("Highscore sucsesfully written")
 			end

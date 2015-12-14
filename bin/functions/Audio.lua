@@ -4,7 +4,9 @@ function loadAudio()
 	gameSounds = {	'assets/sound/Music/Retro Mystic.ogg',
 					'assets/sound/Music/Retro Beat.ogg',
 					'assets/sound/Music/Retro Reggae.ogg' }
+
 	powerUpSound = love.audio.newSource('assets/sound/powerUp7.ogg')
+	
 	pewPewGameSound = love.audio.newSource(gameSounds[1])
 	pewPewGameSound:setLooping()
 	pewPewGameSound:setVolume(0.5)
