@@ -49,7 +49,6 @@ canShootTimer = canShootTimerMax
 createEnemyTimerMax = ENEMY_TIMER
 createEnemyTimer = createEnemyTimerMax
 
-
 -- Configs
 isToDie = true	   -- Checks if player can die
 scoreUpdate = true -- Determinates when score needs to be updated at the end of game
@@ -65,6 +64,7 @@ changeLevel = 30   -- level change on evenry 30 points
 
 POSX = 50
 enemyCount = 0
+
 
 -- PRELOADING ----------------------------------------
 function love.load(arg)
