@@ -36,6 +36,7 @@ function EnemyWaveOne(dt)
 	return enemyCount
 end
 
+
 function EnemyWaveTwo(dt)
 	local startingPosX = 20
 	local startingPosY = - 10
@@ -65,6 +66,7 @@ function EnemyWaveTwo(dt)
 	return enemyCount
 end
 
+
 function EnemyWaveTwo(dt)
 	local startingPosX = 20
 	local startingPosY = - 60
@@ -94,6 +96,7 @@ function EnemyWaveTwo(dt)
 	return enemyCount
 end
 
+
 function EnemyWaveThree(dt)
 	local startingPosXone = love.window.getWidth()/2 - enemyImg:getWidth() - 40
 	local startingPosXtwo = love.window.getWidth()/2 + enemyImg:getWidth() - 40
@@ -116,10 +119,7 @@ function EnemyWaveThree(dt)
 		startingPosXone = startingPosXone - enemyImg:getWidth()/2 + 20  
 		startingPosXtwo = startingPosXtwo + enemyImg:getWidth()/2 - 20
 
-		startingPosY = startingPosY - 150
-
-
-		
+		startingPosY = startingPosY - 150		
 	end
 	enemyCount = 6
 	return enemyCount
