@@ -125,6 +125,26 @@ function EnemyWaveThree(dt)
 	return enemyCount
 end
 
+function EnemyWaveFour(dt)
+	local startingPosX = 10
+	local startingPosY = -60
+
+	local enemyCount = 6
+
+	while enemyCount > 0 do
+		enemyCount = enemyCount - 1
+		startingPosX = math.random(10, love.graphics.getWidth() - enemyImg:getWidth() - 10)
+		newEnemy = { x = startingPosX, y = startingPosY,
+					 img = enemyImg, life = level - 1}
+		table.insert(activeEnemiesOnScreen, newEnemy)
+
+		startingPosY = startingPosY - 150
+
+	end
+	enemyCount = 6
+	return enemyCount
+end
+
 	-- createEnemyTimer = createEnemyTimer - (1 * dt)
 	-- if createEnemyTimer < 0 then
 	-- 	createEnemyTimer = createEnemyTimerMax

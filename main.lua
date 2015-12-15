@@ -28,7 +28,7 @@ score = 0
 
 -- ENTETIES 
 player = { x = 200, y = 690,
-		   speed = 250,
+		   speed = 350,
 		   img = nil, bullet = nil,
 		   life = 3 
 		 }
@@ -40,10 +40,10 @@ activePowerupOnScreen = {} -- array of current powerups
 
 currentEnemiesAlive = 0
 currentWaveCount = 0
-enemyWaves = { EnemyWaveOne,EnemyWaveTwo,EnemyWaveThree}
+enemyWaves = { EnemyWaveOne,EnemyWaveTwo,EnemyWaveThree,EnemyWaveFour}
 
 -- CONSTANTS
-SHOOT_TIMER = 0.5
+SHOOT_TIMER = 0.37
 ENEMY_TIMER = 0.8
 SCORE = 0 			-- FINAL score at the end of game
 
@@ -283,6 +283,8 @@ function CheckCollisionOfAllEnteties( ... )
 			end
 		end
 
+		print(enemy.x)
+
 		if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
 		and (player.life > 0) then
@@ -332,7 +334,7 @@ end
 function CreateEnemy( dt )
 
 	if currentEnemiesAlive <= 0 then
-		i = math.random(1,3)
+		i = math.random(1,4)
 		currentEnemiesAlive = enemyWaves[i]()
 		-- currentEnemiesAlive = EnemyWaveTwo()
 		--currentEnemiesAlive = 6
