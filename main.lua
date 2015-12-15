@@ -30,13 +30,14 @@ score = 0
 player = { x = 200, y = 690,
 		   speed = 350,
 		   img = nil, bullet = nil,
-		   life = 3 
+		   life = 3
 		 }
 
 
 activeEnemiesOnScreen = {} -- array of current activeEnemiesOnScreen on screen
 activeBulletsOnScreen = {} -- array of current activeBulletsOnScreen being drawn and updated
 activePowerupOnScreen = {} -- array of current powerups
+activeEnemyBulletsOnScreen = {}
 
 currentEnemiesAlive = 0
 currentWaveCount = 0
@@ -65,9 +66,6 @@ enemySpeed = 200    -- speed of what aircrafts are moving
 level = 1	       -- cuurent level
 nextLevel = true   -- level changes can occure only once
 
-
-POSX = 50
-enemyCount = 0
 
 
 -- PRELOADING ----------------------------------------
@@ -205,7 +203,6 @@ function love.draw(dt)
 
 
 	-- DRAWING PLAYER IF HE IS ALIVE AND SHOWING SCORE---
-	-- life is missing
     if (player.life > 0) then
 		love.graphics.draw(player.img, player.x, player.y)
 		love.graphics.print("Score :"..score.." ",0,love.graphics:getHeight()-15)
@@ -217,7 +214,23 @@ function love.draw(dt)
 		love.graphics.print("highscore: " .. highscore .. " ",love.graphics:getWidth()-125,love.graphics:getHeight()-15)
 	end
 	-----------------------------------------------------
-	
+
+	-- Life icons drawing
+	local startX = love.graphics:getWidth()/2-75
+	local startY = love.graphics:getHeight()-25
+	local x = startX
+	local y = startY
+	for i=1,player.life do
+		if player.life>4 then
+			love.graphics.draw(imagesLifeNumerals[player.life+1],x,y)
+			love.graphics.draw(imagesLifeNumerals[11],x+imagesLifeNumerals[player.life+1]:getWidth()+5,y)
+			love.graphics.draw(playerLifeImg,x+imagesLifeNumerals[player.life+1]:getWidth()*2+7,y-5)
+			break
+		end
+		love.graphics.draw(playerLifeImg,x,y-5)
+		x = x + playerLifeImg:getWidth()+2
+	end
+	--
 
 	-- DRAWING POWERUPSImg ---------------------------------
 	for i,powerUp in ipairs(activePowerupOnScreen) do
@@ -270,6 +283,7 @@ function CheckCollisionOfAllEnteties( ... )
 	-- If 2 enteties are coliding we are removing them
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
 		for j, bullet in ipairs(activeBulletsOnScreen) do
+
 			if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth() , enemy.img:getHeight(), 
 							  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
 				if enemy.life <= 0 then
@@ -283,8 +297,6 @@ function CheckCollisionOfAllEnteties( ... )
 			end
 		end
 
-		print(enemy.x)
-
 		if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
 		and (player.life > 0) then
@@ -293,6 +305,8 @@ function CheckCollisionOfAllEnteties( ... )
 			player.life = player.life - 1
 		end
 	end
+
+
 	for i,powerUp in ipairs(activePowerupOnScreen) do
 		if CheckCollision(powerUp.x,powerUp.y,powerUp.img:getWidth(),powerUp.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) then
@@ -335,15 +349,12 @@ function CreateEnemy( dt )
 
 	if currentEnemiesAlive <= 0 then
 		i = math.random(1,table.maxn(enemyWaves))
-		currentEnemiesAlive = enemyWaves[5]()
-		-- currentEnemiesAlive = EnemyWaveTwo()
-		--currentEnemiesAlive = 6
+		currentEnemiesAlive = enemyWaves[i]()
 		currentWaveCount = currentWaveCount + 1
 	end
 
 
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
-							--lelel CHANGE
 		enemy.y = enemy.y + (enemySpeed * dt)
 		if enemy.y > love.window.getHeight() - enemy.img:getHeight() - 10  then 
 			table.remove(activeEnemiesOnScreen, i)

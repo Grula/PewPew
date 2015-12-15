@@ -18,7 +18,8 @@ function restartGame()
 	player.life = 3
 	scoreUpdate = true
 
-	scoreUp = 0
-	changeLevel = 30
+	currentEnemiesAlive = 0
+	currentWaveCount = 0
+
 	level = 0
-end	powers = {}
+end
