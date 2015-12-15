@@ -52,6 +52,7 @@ function loadImages()
 
 	playerLifeImg = imagesLifeIcons[2]
 	enemyImg = imagesEnemies[1] 
+	enemyBullet = love.graphics.newImage('assets/Space Shooter/PNG/Lasers/laserRed11.png')
     player.img = imagesPlayerBasic[2]
     player.bullet = imagesBulletBasic[2]
     backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')

@@ -2,7 +2,7 @@ debug = true
 
 --[[
 TODO:
-	- Lives
+	- Lives	- DONE
 	- Score - DONE
 	- Levels [activeEnemiesOnScreen life increse,music change,background change]
 	- Particles
@@ -124,6 +124,21 @@ function love.update(dt)
 		canShootCheck = false
 		canShootTimer = canShootTimerMax
 	end
+
+
+	-- TESTING
+	-- for i, enemy in ipairs(activeEnemiesOnScreen) do
+	-- 	if enemy.canShoot < 0 then
+	-- 		newBullet = { x = newEnemy.x + (newEnemy.img:getWidth()/2 -20),
+	-- 				  y = newEnemy.y + 90,
+	-- 				  img = newEnemy.bullet } 
+	-- 		table.insert(activeEnemyBulletsOnScreen, newBullet)
+	-- 		enemy.canShoot = 2
+	-- 	else
+	-- 		enemy.canShoot = enemy.canShoot - (1 * dt)
+	-- 	end
+
+	-- end
 	-----------------------------------------------------
 
 
@@ -161,6 +176,7 @@ function love.update(dt)
 
 	-- BULLETS update ------------------------------------
 	CheckBullets(dt)
+	CheckEnemyBullets(dt)
 	-------------------------------------------------------
 
 
@@ -244,6 +260,9 @@ function love.draw(dt)
 		love.graphics.draw(player.bullet, bullet.x, bullet.y)
 	end
 
+	for i, bullet in ipairs(activeEnemyBulletsOnScreen) do
+		love.graphics.draw(enemyBullet, bullet.x, bullet.y)
+	end
 	-----------------------------------------------------
 
 
@@ -339,6 +358,15 @@ function CheckBullets(dt)
 	  	-- remove activeBulletsOnScreen when they pass off the screen	
 	  	if bullet.y < 0 then 
 			table.remove(activeBulletsOnScreen, i)
+		end
+	end
+end
+
+function CheckEnemyBullets(dt)
+	for i,bullet in ipairs(activeEnemyBulletsOnScreen) do
+		bullet.y = bullet.y + (450*dt)
+		if bullet.y < 0 then 
+			table.remove(activeEnemyBulletsOnScreen,i)
 		end
 	end
 end

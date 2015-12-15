@@ -167,3 +167,37 @@ function EnemyWaveFive( dt )
 	return enemyCount
 
 end
+
+
+function EnemyWaveOneTEST(dt)
+
+	local startingPosXone = love.window.getWidth()/4
+	local startingPosXtwo = love.window.getWidth()/2 + 50
+	local startingPosY = - 60
+	local odd = true
+	local x = 1
+
+	local enemyCount = 6
+
+	while enemyCount > 0 do
+		enemyCount = enemyCount - 1
+		if odd then
+			x = startingPosXone
+			odd = false
+		else
+			x = startingPosXtwo
+			odd = true
+		end 
+
+		startingPosY = startingPosY - 90
+
+		newEnemy = { x = x, y = startingPosY,
+					 img = enemyImg, bullet = enemyBullet,
+					 life = level - 1,
+					 canShoot = 1}
+		
+		table.insert(activeEnemiesOnScreen, newEnemy)
+	end
+	enemyCount = 6
+	return enemyCount
+end
