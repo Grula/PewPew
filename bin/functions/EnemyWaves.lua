@@ -145,13 +145,25 @@ function EnemyWaveFour(dt)
 	return enemyCount
 end
 
-	-- createEnemyTimer = createEnemyTimer - (1 * dt)
-	-- if createEnemyTimer < 0 then
-	-- 	createEnemyTimer = createEnemyTimerMax
-	-- 	randomNumber = math.random(10, love.graphics.getWidth() - enemyImg:getWidth() - 10)
-	-- 	-- enemy life represents current hitpoits they can take from player, 
-	-- 	-- showed in current level (exp. level = 3 , enemy can take 3 hits)
-	-- 	newEnemy = { x = randomNumber, y = -10, img = enemyImg, life = level - 1}
-	-- 	table.insert(activeEnemiesOnScreen, newEnemy)
-	-- end
-	-- update the positions of activeEnemiesOnScreen
+
+function EnemyWaveFive( dt )
+	local startingPosX = 60
+	local startingPosY = -750
+
+	local enemyCount = 6
+
+	while enemyCount > 0 do
+		enemyCount = enemyCount - 1
+	
+		newEnemy = { x = startingPosX, y = startingPosY,
+					 img = enemyImg, life = level - 1}
+		table.insert(activeEnemiesOnScreen, newEnemy)
+
+		startingPosX = startingPosX + enemyImg:getWidth() - 35
+		startingPosY = startingPosY + 100
+
+	end
+	enemyCount = 6
+	return enemyCount
+
+end

@@ -40,7 +40,7 @@ activePowerupOnScreen = {} -- array of current powerups
 
 currentEnemiesAlive = 0
 currentWaveCount = 0
-enemyWaves = { EnemyWaveOne,EnemyWaveTwo,EnemyWaveThree,EnemyWaveFour}
+enemyWaves = { EnemyWaveOne,EnemyWaveTwo,EnemyWaveThree,EnemyWaveFour,EnemyWaveFive}
 
 -- CONSTANTS
 SHOOT_TIMER = 0.37
@@ -334,8 +334,8 @@ end
 function CreateEnemy( dt )
 
 	if currentEnemiesAlive <= 0 then
-		i = math.random(1,4)
-		currentEnemiesAlive = enemyWaves[i]()
+		i = math.random(1,table.maxn(enemyWaves))
+		currentEnemiesAlive = enemyWaves[5]()
 		-- currentEnemiesAlive = EnemyWaveTwo()
 		--currentEnemiesAlive = 6
 		currentWaveCount = currentWaveCount + 1
