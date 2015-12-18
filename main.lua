@@ -30,7 +30,7 @@ score = 0
 player = { x = 200, y = 690,
 		   speed = 350,
 		   img = nil, bullet = nil,
-		   life = 3 	
+		   life = 3
 		 }
 
 
