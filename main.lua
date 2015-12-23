@@ -44,7 +44,7 @@ currentWaveCount = 0
 enemyWaves = { EnemyWaveOne,EnemyWaveTwo,EnemyWaveThree,EnemyWaveFour,EnemyWaveFive}
 
 -- CONSTANTS
-SHOOT_TIMER = 0.37
+SHOOT_TIMER = 0.45
 ENEMY_TIMER = 0.8
 SCORE = 0 			-- FINAL score at the end of game
 
@@ -62,7 +62,7 @@ scoreUpdate = true -- Determinates when score needs to be updated at the end of 
 highscore = nil	   -- HighScore loaded from  file
 		   
 
-enemySpeed = 200    -- speed of what aircrafts are moving
+enemySpeed = 100    -- speed of what aircrafts are moving
 level = 1	       -- cuurent level
 nextLevel = true   -- level changes can occure only once
 
@@ -314,6 +314,10 @@ function CheckCollisionOfAllEnteties( ... )
 				end
 				table.remove(activeBulletsOnScreen, j)
 			end
+
+			if bullet.y < 0 then
+				table.remove(activeBulletsOnScreen, j)
+			end
 		end
 
 		if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(),
@@ -381,9 +385,23 @@ function CreateEnemy( dt )
 		currentWaveCount = currentWaveCount + 1
 	end
 
-
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
 		enemy.y = enemy.y + (enemySpeed * dt)
+
+
+		if enemy.enemyMove then
+			enemy.x = enemy.x + (enemySpeed * dt)
+			if enemy.x > love.window.getWidth()-enemy.img:getWidth() then
+				enemy.enemyMove = false
+			end
+		else
+			enemy.x = enemy.x - (enemySpeed * dt)
+			if enemy.x < 0 then
+				enemy.enemyMove = true
+			end
+		end
+
+
 		if enemy.y > love.window.getHeight() - enemy.img:getHeight() - 10  then 
 			table.remove(activeEnemiesOnScreen, i)
 			currentEnemiesAlive = currentEnemiesAlive - 1

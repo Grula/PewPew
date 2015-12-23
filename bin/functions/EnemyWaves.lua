@@ -28,7 +28,8 @@ function EnemyWaveOne(dt)
 		startingPosY = startingPosY - 90
 
 		newEnemy = { x = x, y = startingPosY,
-					 img = enemyImg, life = level - 1}
+					 img = enemyImg, life = level - 1,
+					enemyMove = true}
 
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
@@ -58,7 +59,8 @@ function EnemyWaveTwo(dt)
 		startingPosY = startingPosY - 90
 
 		newEnemy = { x = startingPosX, y = startingPosY,
-					 img = enemyImg, life = level - 1}
+					 img = enemyImg, life = level - 1,
+					enemyMove = true}
 
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
@@ -88,7 +90,8 @@ function EnemyWaveTwo(dt)
 		startingPosY = startingPosY - 90
 
 		newEnemy = { x = startingPosX, y = startingPosY,
-					 img = enemyImg, life = level - 1}
+					 img = enemyImg, life = level - 1,
+					enemyMove = true}
 
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
@@ -110,10 +113,12 @@ function EnemyWaveThree(dt)
 
 
 		newEnemy = { x = startingPosXone, y = startingPosY,
-					 img = enemyImg, life = level - 1}
+					 img = enemyImg, life = level - 1,
+					enemyMove = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 		newEnemy = { x = startingPosXtwo, y = startingPosY,
-					 img = enemyImg, life = level - 1}
+					 img = enemyImg, life = level - 1,
+					enemyMove = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 		
 		startingPosXone = startingPosXone - enemyImg:getWidth()/2 + 20  
@@ -135,7 +140,8 @@ function EnemyWaveFour(dt)
 		enemyCount = enemyCount - 1
 		startingPosX = math.random(10, love.graphics.getWidth() - enemyImg:getWidth() - 10)
 		newEnemy = { x = startingPosX, y = startingPosY,
-					 img = enemyImg, life = level - 1}
+					 img = enemyImg, life = level - 1,
+					enemyMove = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 
 		startingPosY = startingPosY - 150
@@ -156,7 +162,8 @@ function EnemyWaveFive( dt )
 		enemyCount = enemyCount - 1
 	
 		newEnemy = { x = startingPosX, y = startingPosY,
-					 img = enemyImg, life = level - 1}
+					 img = enemyImg, life = level - 1,
+					 enemyMove = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 
 		startingPosX = startingPosX + enemyImg:getWidth() - 35
