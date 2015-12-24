@@ -9,7 +9,7 @@ function changeLevel()
 		nextLevel = false
 		enemies = {}
 		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack1.png')
-		dificulty = 250
+		dificulty = dificulty + 50
 
 	elseif level == 2 and not nextLevel then
 
@@ -17,7 +17,7 @@ function changeLevel()
 		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png')
 		nextLevel = true
 		enemies = {}
-		dificulty = 300
+		dificulty = dificulty + 50
 		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
 
 	elseif level == 3 then
