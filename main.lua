@@ -280,7 +280,7 @@ end
 
 
 function IncreseDif()
-	if currentWaveCount > 5 then
+	if currentWaveCount > 5 and score >= ((level+1)*25) then
 		level = level + 1
 		enemySpeed = enemySpeed + 35
 		currentWaveCount = 0
@@ -329,10 +329,16 @@ function CheckCollisionOfAllEnteties( ... )
 		end
 	end
 
+	--
+
+
+	--
+
 
 	for i,powerUp in ipairs(activePowerupOnScreen) do
 		if CheckCollision(powerUp.x,powerUp.y,powerUp.img:getWidth(),powerUp.img:getHeight(),
-						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) then
+						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
+			and isAlive then
 			table.remove(activePowerupOnScreen,i)
 			powerUpSound:play()
 		end
