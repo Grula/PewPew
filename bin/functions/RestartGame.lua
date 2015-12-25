@@ -9,7 +9,7 @@ function restartGame()
 	player.y = 690
 	-- reseting game state
 
-	enemySpeed = 200		-- speed of what aircrafts are moving
+	enemySpeed = 100		-- speed of what aircrafts are moving
 	activeEnemiesOnScreen = {} 
 	backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
 	
