@@ -29,7 +29,7 @@ function EnemyWaveOne(dt)
 
 		newEnemy = { x = x, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					enemyMove = true}
+					enemyMoveInOneDirection = true}
 
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
@@ -60,7 +60,7 @@ function EnemyWaveTwo(dt)
 
 		newEnemy = { x = startingPosX, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					enemyMove = true}
+					enemyMoveInOneDirection = true}
 
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
@@ -91,7 +91,7 @@ function EnemyWaveTwo(dt)
 
 		newEnemy = { x = startingPosX, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					enemyMove = true}
+					enemyMoveInOneDirection = true}
 
 		table.insert(activeEnemiesOnScreen, newEnemy)
 	end
@@ -114,11 +114,11 @@ function EnemyWaveThree(dt)
 
 		newEnemy = { x = startingPosXone, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					enemyMove = true}
+					enemyMoveInOneDirection = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 		newEnemy = { x = startingPosXtwo, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					enemyMove = true}
+					enemyMoveInOneDirection = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 		
 		startingPosXone = startingPosXone - enemyImg:getWidth()/2 + 20  
@@ -141,7 +141,7 @@ function EnemyWaveFour(dt)
 		startingPosX = math.random(10, love.graphics.getWidth() - enemyImg:getWidth() - 10)
 		newEnemy = { x = startingPosX, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					enemyMove = true}
+					enemyMoveInOneDirection = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 
 		startingPosY = startingPosY - 150
@@ -163,7 +163,7 @@ function EnemyWaveFive( dt )
 	
 		newEnemy = { x = startingPosX, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					 enemyMove = true}
+					 enemyMoveInOneDirection = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 
 		startingPosX = startingPosX + enemyImg:getWidth() - 35

@@ -20,7 +20,7 @@ require("bin.functions.DrawBackground")	 -- Function for drawing Background 	---
 require("bin.functions.PowerUp") 		 -- Function for making PowerUps 		TODO
 require("bin.functions.Audio")			 -- Function for loading Audio files	ADD-
 require("bin.functions.Images")			 -- Function for lading Images 			ADD-
-require("bin.functions.Level")			 -- Function for changing Levels 		TODO
+--require("bin.functions.Level")			 -- Function for changing Levels 		TODO
 --require("bin.functions.Variables")
 require("bin.functions.EnemyWaves")
 
@@ -127,18 +127,15 @@ function love.update(dt)
 
 
 	-- TESTING
-	-- for i, enemy in ipairs(activeEnemiesOnScreen) do
-	-- 	if enemy.canShoot < 0 then
-	-- 		newBullet = { x = newEnemy.x + (newEnemy.img:getWidth()/2 -20),
-	-- 				  y = newEnemy.y + 90,
-	-- 				  img = newEnemy.bullet } 
-	-- 		table.insert(activeEnemyBulletsOnScreen, newBullet)
-	-- 		enemy.canShoot = 2
-	-- 	else
-	-- 		enemy.canShoot = enemy.canShoot - (1 * dt)
-	-- 	end
-
-	-- end
+	for i, enemy in ipairs(activeEnemiesOnScreen) do
+		local randomNumb = math.random(1,1000)
+		if randomNumb == 1 or randomNumb == 500 then
+			newBullet = { x = enemy.x + (enemy.img:getWidth()/2 -20),
+					  y = enemy.y + 90,
+					  img = enemyBullet } 
+			table.insert(activeEnemyBulletsOnScreen, newBullet)
+		end
+	end
 	-----------------------------------------------------
 
 
@@ -280,7 +277,8 @@ end
 
 
 function IncreseDif()
-	if currentWaveCount > 5 and score >= ((level+1)*25) then
+	print(level)
+	if currentWaveCount > 5 and (score >= ((level)*25)) then
 		level = level + 1
 		enemySpeed = enemySpeed + 35
 		currentWaveCount = 0
@@ -302,7 +300,17 @@ function CheckCollisionOfAllEnteties( ... )
 	-- If 2 enteties are coliding we are removing them
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
 		for j, bullet in ipairs(activeBulletsOnScreen) do
-
+			for k, enemyBullet in ipairs(activeEnemyBulletsOnScreen) do
+				if CheckCollision(enemyBullet.x,enemyBullet.y,enemyBullet.img:getWidth(),enemyBullet.img:getHeight(),
+								  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
+					table.remove(activeBulletsOnScreen, j)
+					table.remove(activeEnemyBulletsOnScreen, k)
+					if bulletDestroySound:isPlaying() then
+						bulletDestroySound:stop()
+					end
+					bulletDestroySound:play()
+				end
+			end
 			if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth() , enemy.img:getHeight(), 
 							  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
 				if enemy.life <= 0 then
@@ -330,8 +338,17 @@ function CheckCollisionOfAllEnteties( ... )
 	end
 
 	--
-
-
+	for i, bullet in ipairs(activeEnemyBulletsOnScreen) do
+		if CheckCollision(player.x,player.y,player.img:getWidth(), player.img:getHeight(),
+						   bullet.x,bullet.y,bullet.img:getWidth(),bullet.img:getHeight()) then
+			player.life = player.life - 1
+			table.remove(activeEnemyBulletsOnScreen,i)
+			if bulletDestroySound:isPlaying() then
+				bulletDestroySound:stop()
+			end
+			bulletDestroySound:play()
+		end
+	end
 	--
 
 
@@ -374,7 +391,7 @@ end
 
 function CheckEnemyBullets(dt)
 	for i,bullet in ipairs(activeEnemyBulletsOnScreen) do
-		bullet.y = bullet.y + (450*dt)
+		bullet.y = bullet.y + (enemySpeed*3*dt)
 		if bullet.y < 0 then 
 			table.remove(activeEnemyBulletsOnScreen,i)
 		end
@@ -395,15 +412,15 @@ function CreateEnemy( dt )
 		enemy.y = enemy.y + (enemySpeed * dt)
 
 
-		if enemy.enemyMove then
+		if enemy.enemyMoveInOneDirection then
 			enemy.x = enemy.x + (enemySpeed * dt)
 			if enemy.x > love.window.getWidth()-enemy.img:getWidth() then
-				enemy.enemyMove = false
+				enemy.enemyMoveInOneDirection = false
 			end
 		else
 			enemy.x = enemy.x - (enemySpeed * dt)
 			if enemy.x < 0 then
-				enemy.enemyMove = true
+				enemy.enemyMoveInOneDirection = true
 			end
 		end
 
@@ -421,6 +438,7 @@ end
 
 
 -- SCORE ------------------------------------------------------------------
+-- needs fixing
 function WriteHighscore( score )
 	--bin/highscore/
 	local file =assert(io.open("bin\\highscore\\highscore.txt","w"),"Error while opening file :(")

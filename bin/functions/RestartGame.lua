@@ -11,6 +11,10 @@ function restartGame()
 
 	enemySpeed = 100		-- speed of what aircrafts are moving
 	activeEnemiesOnScreen = {} 
+	activeEnemyBulletsOnScreen = {}
+	activePowerupOnScreen = {}
+	activeBulletsOnScreen = {}
+
 	backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
 	
 	score = 0
