@@ -27,6 +27,7 @@ require("bin.functions.EnemyWaves")
 score = 0
 
 -- ENTETIES 
+-- player cant have more then 9 lives
 player = { x = 200, y = 690,
 		   speed = 350,
 		   img = nil, bullet = nil,
@@ -179,7 +180,10 @@ function love.update(dt)
 	-------------------------------------------------------- 
 
 	-- POWERUPS --------------------------------------------
-	powerUp(dt)
+	local randomNumber = math.random(4000)
+	if(randomNumber < 3) and (player.life > 0) then
+		powerUp(dt)
+	end
 	-------------------------------------------------------
 
 
@@ -227,9 +231,12 @@ function love.draw(dt)
 	local y = startY
 	for i=1,player.life do
 		if player.life>4 then
-			love.graphics.draw(imagesLifeNumerals[player.life+1],x,y)
-			love.graphics.draw(imagesLifeNumerals[11],x+imagesLifeNumerals[player.life+1]:getWidth()+5,y)
-			love.graphics.draw(playerLifeImg,x+imagesLifeNumerals[player.life+1]:getWidth()*2+7,y-5)
+			if player.life > 9 then
+				player.life = 9
+			end
+				love.graphics.draw(imagesLifeNumerals[player.life+1],x,y)
+				love.graphics.draw(imagesLifeNumerals[11],x+imagesLifeNumerals[player.life+1]:getWidth()+5,y)
+				love.graphics.draw(playerLifeImg,x+imagesLifeNumerals[player.life+1]:getWidth()*2+7,y-5)
 			break
 		end
 		love.graphics.draw(playerLifeImg,x,y-5)
@@ -336,12 +343,20 @@ function CheckCollisionOfAllEnteties( ... )
 	end
 	--
 
+	for i,powerUp in ipairs(activePowerupOnScreen) do
+		powerUp.y = powerUp.y + (150*love.timer.getDelta())
+		if powerUp.y > love.window.getHeight() - 40 then
+			table.remove(activePowerupOnScreen,i)
+		end
+	end
+
 
 	for i,powerUp in ipairs(activePowerupOnScreen) do
 		if CheckCollision(powerUp.x,powerUp.y,powerUp.img:getWidth(),powerUp.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
 			and isAlive then
 			table.remove(activePowerupOnScreen,i)
+			player.life = player.life + 1
 			powerUpSound:play()
 		end
 	end
