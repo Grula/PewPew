@@ -8,6 +8,7 @@ TODO:
 	- Particles
 	- highscore - DONE
 	- Ammo
+	-Nesto
 
 
 	funkcije za pomeranje , oko 5-6 njih se biraju random i imaju
