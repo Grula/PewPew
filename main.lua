@@ -8,7 +8,6 @@ TODO:
 	- Particles
 	- highscore - DONE
 	- Ammo
-	-Nesto
 
 
 	funkcije za pomeranje , oko 5-6 njih se biraju random i imaju
@@ -21,7 +20,7 @@ require("bin.functions.DrawBackground")	 -- Function for drawing Background 	---
 require("bin.functions.PowerUp") 		 -- Function for making PowerUps 		TODO
 require("bin.functions.Audio")			 -- Function for loading Audio files	ADD-
 require("bin.functions.Images")			 -- Function for lading Images 			ADD-
---require("bin.functions.Level")			 -- Function for changing Levels 		TODO
+require("bin.functions.Level")			 -- Function for changing Levels 		TODO
 --require("bin.functions.Variables")
 require("bin.functions.EnemyWaves")
 
@@ -66,6 +65,12 @@ highscore = nil	   -- HighScore loaded from  file
 enemySpeed = 100    -- speed of what aircrafts are moving
 level = 1	       -- cuurent level
 nextLevel = true   -- level changes can occure only once
+
+
+-- Variables used in function changeLevel()
+currentLevel = 1 
+changeLevel = false
+
 
 
 
@@ -140,30 +145,16 @@ function love.update(dt)
 	-----------------------------------------------------
 
 
-	if level == 1 then
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
-		--enemyImg = imagesEnemies[3]
-	-- Level setting 
-	elseif level == 2 and nextLevel then
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/purple.png')
-		nextLevel = false
-		currentEnemiesAlive = 0
-		activeEnemiesOnScreen = {}
-		enemyImg = imagesEnemies[level]
-	elseif level == 3 and not nextLevel then
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png')
-		nextLevel = true
-		currentEnemiesAlive = 0
-		activeEnemiesOnScreen = {}
-		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
-	elseif level == 4 then
-		-- code
-	end
 
 
 
 	-- LevelChange ---------------------------------------
 	IncreseDif()
+
+	-- Game crashes after 3rd level , images of enemies needs to be added
+	-- or reseted to lower value
+	ChangeLevel()
+
 	-------------------------------------------------------
 
 
@@ -278,11 +269,12 @@ end
 
 
 function IncreseDif()
-	print(level)
 	if currentWaveCount > 5 and (score >= ((level)*25)) then
 		level = level + 1
 		enemySpeed = enemySpeed + 35
 		currentWaveCount = 0
+
+		canShootTimerMax = canShootTimerMax - 0.05
 	end
 end
 
@@ -306,10 +298,6 @@ function CheckCollisionOfAllEnteties( ... )
 								  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
 					table.remove(activeBulletsOnScreen, j)
 					table.remove(activeEnemyBulletsOnScreen, k)
-					if bulletDestroySound:isPlaying() then
-						bulletDestroySound:stop()
-					end
-					bulletDestroySound:play()
 				end
 			end
 			if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth() , enemy.img:getHeight(), 
@@ -344,10 +332,6 @@ function CheckCollisionOfAllEnteties( ... )
 						   bullet.x,bullet.y,bullet.img:getWidth(),bullet.img:getHeight()) then
 			player.life = player.life - 1
 			table.remove(activeEnemyBulletsOnScreen,i)
-			if bulletDestroySound:isPlaying() then
-				bulletDestroySound:stop()
-			end
-			bulletDestroySound:play()
 		end
 	end
 	--

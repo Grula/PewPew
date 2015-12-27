@@ -1,27 +1,17 @@
-function changeLevel()
-	if level == 0 then
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
-	-- Level setting 
-	elseif level == 1 and nextLevel then
-
-		canShootTimerMax = canShootTimerMax - 0.05
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/purple.png')
-		nextLevel = false
-		enemies = {}
-		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack1.png')
-		dificulty = 250
-
-	elseif level == 2 and not nextLevel then
-
-		canShootTimerMax = canShootTimerMax - 0.05
-		backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/darkPurple.png')
-		nextLevel = true
-		enemies = {}
-		dificulty = 300
-		enemyImg = love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
-
-	elseif level == 3 then
-		--
+function ChangeLevel()
+	if currentLevel < level then
+		currentLevel = level
+		changeLevel = true
 	end
-	return true
+
+	if changeLevel then
+		changeLevel = false
+	
+		backgroundImg = backgroundImges[currentLevel] 
+	 	enemyImg = imagesEnemies[currentLevel]
+
+
+	 	activeEnemiesOnScreen = {}
+	 	currentEnemiesAlive = 0
+	end
 end
