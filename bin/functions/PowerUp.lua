@@ -6,5 +6,4 @@ function powerUp( dt )
 	print(powerUpImg)	
 	newPowerUp = {x=posX,y = -10,img = powerUpImg}
 	table.insert(activePowerupOnScreen,newPowerUp)
-	
 end

@@ -230,7 +230,7 @@ function love.draw(dt)
 	local x = startX
 	local y = startY
 	for i=1,player.life do
-		if player.life>4 then
+		if player.life > 4 then
 			if player.life > 9 then
 				player.life = 9
 			end
@@ -276,13 +276,16 @@ end
 
 
 function IncreseDif()
-	if currentWaveCount > 5 and (score >= ((level)*25)) then
+	if currentWaveCount > 5 and (score >= ((level)*25)) then -- 5 , 25
 		level = level + 1
-		enemySpeed = enemySpeed + 35
+		powerUp()
+		enemySpeed = enemySpeed + 25
 		currentWaveCount = 0
 
 		canShootTimerMax = canShootTimerMax - 0.05
 	end
+	-- BOSS NEEDS TO BE ADDED HERE after 5th lvl
+
 end
 
 -- Timer to be able to shooooooooooooooooooot pewpew -------------------------------------------------------------------------------------------------------------
@@ -334,6 +337,7 @@ function CheckCollisionOfAllEnteties( ... )
 	end
 
 	--
+	-- coalision with enemy bullets
 	for i, bullet in ipairs(activeEnemyBulletsOnScreen) do
 		if CheckCollision(player.x,player.y,player.img:getWidth(), player.img:getHeight(),
 						   bullet.x,bullet.y,bullet.img:getWidth(),bullet.img:getHeight()) then
@@ -343,6 +347,7 @@ function CheckCollisionOfAllEnteties( ... )
 	end
 	--
 
+	-- updating position of powerup
 	for i,powerUp in ipairs(activePowerupOnScreen) do
 		powerUp.y = powerUp.y + (150*love.timer.getDelta())
 		if powerUp.y > love.window.getHeight() - 40 then
@@ -350,7 +355,7 @@ function CheckCollisionOfAllEnteties( ... )
 		end
 	end
 
-
+	-- coalision of powerups
 	for i,powerUp in ipairs(activePowerupOnScreen) do
 		if CheckCollision(powerUp.x,powerUp.y,powerUp.img:getWidth(),powerUp.img:getHeight(),
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
@@ -381,7 +386,7 @@ end
 
 function CheckBullets(dt)
 	for i, bullet in ipairs(activeBulletsOnScreen) do
-		bullet.y = bullet.y - (250 * dt)
+		bullet.y = bullet.y - (350 * dt)
 	  	-- remove activeBulletsOnScreen when they pass off the screen	
 	  	if bullet.y < 0 then 
 			table.remove(activeBulletsOnScreen, i)
@@ -401,7 +406,6 @@ end
 
 
 function CreateEnemy( dt )
-
 	if currentEnemiesAlive <= 0 then
 		i = math.random(1,table.maxn(enemyWaves))
 		currentEnemiesAlive = enemyWaves[i]()
@@ -410,8 +414,6 @@ function CreateEnemy( dt )
 
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
 		enemy.y = enemy.y + (enemySpeed * dt)
-
-
 		if enemy.enemyMoveInOneDirection then
 			enemy.x = enemy.x + (enemySpeed * dt)
 			if enemy.x > love.window.getWidth()-enemy.img:getWidth() then
@@ -423,7 +425,6 @@ function CreateEnemy( dt )
 				enemy.enemyMoveInOneDirection = true
 			end
 		end
-
 
 		if enemy.y > love.window.getHeight() - enemy.img:getHeight() - 10  then 
 			table.remove(activeEnemiesOnScreen, i)

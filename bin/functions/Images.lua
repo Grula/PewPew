@@ -15,15 +15,35 @@ function loadImages()
 	imagesEnemies = {
 		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyGreen1.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack1.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png')
-		}
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed1.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlue1.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyGreen2.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack2.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed2.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlue2.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyGreen3.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack3.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed3.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlue3.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyGreen4.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack4.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed4.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlue4.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyGreen5.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlack5.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyRed5.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Enemies/enemyBlue5.png')
+	}
 
 	-- Blue,Red,Green
 	imagesPlayerBasic = {
 		love.graphics.newImage('assets/Space Shooter/PNG/playerShip1_blue.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/playerShip1_red.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/playerShip1_green.png')
+		love.graphics.newImage('assets/Space Shooter/PNG/playerShip1_green.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/playerShip1_orange.png')
 	}
+
+	
 	imagesBulletBasic = {
 		love.graphics.newImage('assets/Space Shooter/PNG/Lasers/laserBlue01.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/Lasers/laserRed01.png'),
