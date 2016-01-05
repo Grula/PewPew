@@ -23,7 +23,9 @@ require("bin.functions.Level")			 -- Function for changing Levels 		TODO
 --require("bin.functions.Variables")
 require("bin.functions.EnemyWaves")
 
-score = 1
+
+score = 0
+
 
 -- ENTETIES 
 -- player cant have more then 9 lives
