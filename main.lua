@@ -6,7 +6,7 @@ TODO:
 	- Score - DONE
 	- Levels [activeEnemiesOnScreen life increse,music change,background change]
 	- highscore - DONE
-	- Weapons
+	- Weaponssssss
 
 
 	funkcije za pomeranje , oko 5-6 njih se biraju random i imaju
