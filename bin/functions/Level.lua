@@ -8,7 +8,7 @@ function ChangeLevel()
 	if changeLevel then
 		changeLevel = false
 		
-		local picNum = math.mod(currentLevel,3)+1		
+		local picNum = math.mod(currentLevel-1,3)+1		
 
 		backgroundImg = backgroundImges[picNum] 
 	 	enemyImg = imagesEnemies[currentLevel]

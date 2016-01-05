@@ -114,7 +114,7 @@ function EnemyWaveThree(dt)
 
 		newEnemy = { x = startingPosXone, y = startingPosY,
 					 img = enemyImg, life = level - 1,
-					enemyMoveInOneDirection = true}
+					enemyMoveInOneDirection = false}
 		table.insert(activeEnemiesOnScreen, newEnemy)
 		newEnemy = { x = startingPosXtwo, y = startingPosY,
 					 img = enemyImg, life = level - 1,

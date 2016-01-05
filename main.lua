@@ -5,9 +5,8 @@ TODO:
 	- Lives	- DONE
 	- Score - DONE
 	- Levels [activeEnemiesOnScreen life increse,music change,background change]
-	- Particles
 	- highscore - DONE
-	- Ammo
+	- Weapons
 
 
 	funkcije za pomeranje , oko 5-6 njih se biraju random i imaju
@@ -276,6 +275,7 @@ end
 
 
 function IncreseDif()
+	local boss = 5
 	if currentWaveCount > 5 and (score >= ((level)*25)) then -- 5 , 25
 		level = level + 1
 		powerUp()
@@ -284,11 +284,14 @@ function IncreseDif()
 
 		canShootTimerMax = canShootTimerMax - 0.05
 	end
-	-- BOSS NEEDS TO BE ADDED HERE after 5th lvl
+	-- if level == boss then
+	-- 	BossLevel()
+	-- 	boss = 10
+	-- end
 
 end
 
--- Timer to be able to shooooooooooooooooooot pewpew -------------------------------------------------------------------------------------------------------------
+-- Timer to be able to shoot -------------------------------------------------------------------------------------------------------------
 function ChecksShootTimer( dt )
 	canShootTimer = canShootTimer - (1 * dt)
 	if canShootTimer < 0 then
