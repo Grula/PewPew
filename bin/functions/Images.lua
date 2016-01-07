@@ -2,10 +2,11 @@
 
 function loadImages()
 	imagesPowerup = {
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupGreen_bolt.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupBlue_star.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupRed_shield.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/things_gold.png')}
+		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupBlue_shield.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/star_gold.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupBlue_bolt.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/pill_blue.png')
+	}
 	---------------------------------------------------------------------------------
 	backgroundImges = {
 		love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png'),

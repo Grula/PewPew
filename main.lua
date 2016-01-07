@@ -32,7 +32,8 @@ score = 0
 player = { x = 200, y = 690,
 		   speed = 350,
 		   img = nil, bullet = nil,
-		   life = 3
+		   life = 3,
+		   shield = true, shieldDuration = 10
 		 }
 
 
@@ -250,6 +251,7 @@ function love.draw(dt)
 		love.graphics.draw(powerUp.img,powerUp.x,powerUp.y)
 	end
 
+
 	-----------------------------------------------------
 
 	-- DRAWING BULLETS AND PARTICLES---------------------
@@ -268,6 +270,16 @@ function love.draw(dt)
 		love.graphics.draw(enemy.img, enemy.x, enemy.y)
 	end
 	-----------------------------------------------------
+
+	if player.shield then
+		print('Hello?')
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.circle("fill",
+							player.x+player.img:getWidth()/2,
+							 player.y+player.img:getHeight()/2,
+							 60,600)
+	end
+
 end
 
 
@@ -366,7 +378,8 @@ function CheckCollisionOfAllEnteties( ... )
 						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
 			and isAlive then
 			table.remove(activePowerupOnScreen,i)
-			player.life = player.life + 1
+			CheckPowerUp(powerUp.class)
+			--player.life = player.life + 1
 			powerUpSound:play()
 		end
 	end
