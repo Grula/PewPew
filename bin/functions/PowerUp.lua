@@ -1,7 +1,7 @@
 -- Creates powerUp
 function powerUp( dt )
 	i = math.random(4)
-	posX = math.random(10, love.graphics.getWidth() - player.img:getWidth()/2)
+	posX = math.random(10 , love.graphics.getWidth() - player.img:getWidth()/ 2)
 	powerUpImg = imagesPowerup[i]
 	newPowerUp = {x=posX,y = -10,img = powerUpImg,class = i}
 	table.insert(activePowerupOnScreen,newPowerUp)
