@@ -33,7 +33,7 @@ player = { x = 200, y = 690,
 		   speed = 350,
 		   img = nil, bullet = nil,
 		   life = 3,
-		   shield = true, shieldDuration = 10
+		   shield = false, shieldDuration = 10
 		 }
 
 
@@ -424,6 +424,7 @@ end
 
 
 function CreateEnemy( dt )
+
 	if currentEnemiesAlive <= 0 then
 		i = math.random(1,table.maxn(enemyWaves))
 		currentEnemiesAlive = enemyWaves[i]()
@@ -465,6 +466,8 @@ function WriteHighscore( score )
 	file:close()
 	return true
 end	
+
+
 function LoadHighscore()
 	--C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/
 	local file =assert(io.open("C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/bin/highscore/highscore.txt","r"),"Error while opening file :(")
