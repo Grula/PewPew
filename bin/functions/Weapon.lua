@@ -4,7 +4,7 @@ function MakeBullets( ... )
 
 		if weaponUpdate then
 			print(weaponUpdate)
-			canShootTimerMax = canShootTimerMax + 0.15
+			canShootTimerMax = canShootTimerMax + 0.05
 			weaponUpdate = false
 		end
 
@@ -20,7 +20,7 @@ function MakeBullets( ... )
 
 		if not weaponUpdate then
 			print(weaponUpdate)
-			canShootTimerMax = canShootTimerMax + 0.15
+			canShootTimerMax = canShootTimerMax + 0.05
 			weaponUpdate = true
 		end
 
@@ -36,7 +36,7 @@ function MakeBullets( ... )
 		
 		if weaponUpdate then
 			print(weaponUpdate)
-			canShootTimerMax = canShootTimerMax + 0.15
+			canShootTimerMax = canShootTimerMax + 0.05
 			weaponUpdate = false
 		end
 
@@ -55,7 +55,7 @@ function MakeBullets( ... )
 
 		if not weaponUpdate then
 			print(weaponUpdate)
-			canShootTimerMax = canShootTimerMax + 0.15
+			canShootTimerMax = canShootTimerMax + 0.05
 			weaponUpdate = true
 		end
 
