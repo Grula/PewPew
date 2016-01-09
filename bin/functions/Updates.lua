@@ -20,6 +20,7 @@ function CheckBullets(dt)
 end
 
 function CheckEnemyBullets(dt)
+    --PROVERITI
 	for i,bullet in ipairs(activeEnemyBulletsOnScreen) do
 		bullet.y = bullet.y + (enemySpeed*2*dt)
 		if bullet.y < 0 then 

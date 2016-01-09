@@ -82,6 +82,9 @@ function loadImages()
 		love.graphics.newImage('assets/Space Shooter/PNG/UI/numeral9.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/UI/numeralX.png')
 	}
+    imagesBosses = {
+        love.graphics.newImage('assets/Space Shooter/PNG/ufoBlue.png')
+    }
 
 
 	playerShieldImg = love.graphics.newImage('assets/Space Shooter/PNG/Effects/shield1.png')

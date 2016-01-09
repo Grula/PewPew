@@ -178,5 +178,17 @@ end
 
 
 function BossWave()
+    --posle svaka tri levela dolazi boss i ide lijevo-desno
+    --i ide i nadolje,ali sve sporo
+    --i neka puca rakete
+    newEnemy = { x = 0, y = 0,
+					 img = enemyImg, life = level - 1,
+					 enemyMoveInOneDirection = true}
+		table.insert(activeEnemiesOnScreen, newEnemy)
+    enemySpeed=100
+    
+
+    
+    
 	
 end
