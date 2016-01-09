@@ -1,17 +1,5 @@
 debug = true
 
---[[
-TODO:
-	- Lives	- DONE
-	- Score - DONE
-	- Levels [activeEnemiesOnScreen life increse,music change,background change]
-	- highscore - DONE
-	- Weaponssssss
-
-
-	funkcije za pomeranje , oko 5-6 njih se biraju random i imaju
-	random pattern
-]]
 
 require("bin.functions.RestartGame")	 -- Function for restarting game 		TODO
 require("bin.functions.Score")			 -- Function for Score/HighScore 		----
@@ -20,20 +8,22 @@ require("bin.functions.PowerUp") 		 -- Function for making PowerUps 		TODO
 require("bin.functions.Audio")			 -- Function for loading Audio files	ADD-
 require("bin.functions.Images")			 -- Function for lading Images 			ADD-
 require("bin.functions.Level")			 -- Function for changing Levels 		TODO
---require("bin.functions.Variables")
+require("bin.functions.Updates")
 require("bin.functions.EnemyWaves")
+require("bin.functions.Weapon")
+require("bin.functions.Collision")
 
 
 score = 0
-
 
 -- ENTETIES 
 -- player cant have more then 9 lives
 player = { x = 200, y = 690,
 		   speed = 350,
-		   img = nil, bullet = nil,
+		   img = nil,
+		   bullet = nil, bulletStrength = 1, bulletDamage = 1.0,
 		   life = 3,
-		   shield = false, shieldDuration = 10
+		   shield = false, shieldDuration = 0, shieldImg = nil
 		 }
 
 
@@ -63,12 +53,17 @@ createEnemyTimer = createEnemyTimerMax
 isAlive = true	   -- Checks if player is alive
 scoreUpdate = true -- Determinates when score needs to be updated at the end of game
 highscore = nil	   -- HighScore loaded from  file
-		   
+bonusScore = false	-- Checks if bonus score is active
+bonusScoreDuration = 0		   -- Remaining time of bonus score :)
 
+
+weaponUpdate = true	-- checking if we got an powerUp so we slow down shooting
 enemySpeed = 100    -- speed of what aircrafts are moving
 level = 1	       -- cuurent level
 nextLevel = true   -- level changes can occure only once
 
+
+currentPlayerBulletDamage = 1
 
 -- Variables used in function changeLevel()
 currentLevel = 1 
@@ -122,33 +117,25 @@ function love.update(dt)
 	end
 
 	if love.keyboard.isDown(' ', 'rctrl', 'lctrl', 'ctrl') and canShootCheck and (player.life > 0) then
-		newBullet = { x = player.x + (player.img:getWidth()/2 - 5), y = player.y - 50, img = player.bullet } 
-		table.insert(activeBulletsOnScreen, newBullet)
-
-		if	bulletSound:isPlaying() then
-			bulletSound:stop()
-		end
-
-		bulletSound:play()
-		canShootCheck = false
-		canShootTimer = canShootTimerMax
+		MakeBullets() 
 	end
 
 
-	-- TESTING
-	for i, enemy in ipairs(activeEnemiesOnScreen) do
-		local randomNumb = math.random(1,1000)
-		if randomNumb == 1 or randomNumb == 500 then
-			newBullet = { x = enemy.x + (enemy.img:getWidth()/2 -20),
-					  y = enemy.y + 90,
-					  img = enemyBullet } 
-			table.insert(activeEnemyBulletsOnScreen, newBullet)
-		end
-	end
-	-----------------------------------------------------
+	-- Enemy shooting(Updates)
+	EnemyShoot()
 
+	-- updating shield duration
+	UpdateShield(dt)
+	--
 
+	-- Updating bonus score duration!
+	UpdateBonusScore(dt)
 
+	--
+
+	--Updating visuals of bullets(lazors)
+	UpdateVisualLasers()
+	--
 
 
 	-- LevelChange ---------------------------------------
@@ -194,6 +181,7 @@ function love.update(dt)
 		if score < highscore then
 			gameOverSound:play()
 		end
+		player.shield = false
 		isAlive = false
 		activeBulletsOnScreen = {}
 	end
@@ -272,12 +260,7 @@ function love.draw(dt)
 	-----------------------------------------------------
 
 	if player.shield then
-		print('Hello?')
-		love.graphics.setColor(255, 255, 255)
-		love.graphics.circle("fill",
-							player.x+player.img:getWidth()/2,
-							 player.y+player.img:getHeight()/2,
-							 60,600)
+		love.graphics.draw(player.shieldImg,player.x-17,player.y-17)
 	end
 
 end
@@ -286,141 +269,6 @@ end
 
 --************************************************************************** FUNCTIONS **************************************************************************
 --***************************************************************************************************************************************************************
-
-
-function IncreseDif()
-	local boss = 5
-	if currentWaveCount > 5 and (score >= ((level)*25)) then -- 5 , 25
-		level = level + 1
-		powerUp()
-		enemySpeed = enemySpeed + 25
-		currentWaveCount = 0
-
-		canShootTimerMax = canShootTimerMax - 0.05
-	end
-	-- if level == boss then
-	-- 	BossLevel()
-	-- 	boss = 10
-	-- end
-
-end
-
--- Timer to be able to shoot -------------------------------------------------------------------------------------------------------------
-function ChecksShootTimer( dt )
-	canShootTimer = canShootTimer - (1 * dt)
-	if canShootTimer < 0 then
-	  canShootCheck = true
-	end
-end
--------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
--- Checking colision ----------------------------------------------------------------------------------------------------------------------------------------------
-function CheckCollisionOfAllEnteties( ... )
-	-- If 2 enteties are coliding we are removing them
-	for i, enemy in ipairs(activeEnemiesOnScreen) do
-		for j, bullet in ipairs(activeBulletsOnScreen) do
-			for k, enemyBullet in ipairs(activeEnemyBulletsOnScreen) do
-				if CheckCollision(enemyBullet.x,enemyBullet.y,enemyBullet.img:getWidth(),enemyBullet.img:getHeight(),
-								  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
-					table.remove(activeBulletsOnScreen, j)
-					table.remove(activeEnemyBulletsOnScreen, k)
-				end
-			end
-			if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth() , enemy.img:getHeight(), 
-							  bullet.x, bullet.y, bullet.img:getWidth(), bullet.img:getHeight()) then
-				if enemy.life <= 0 then
-					currentEnemiesAlive = currentEnemiesAlive - 1
-					table.remove(activeEnemiesOnScreen, i)
-					score = score + 1
-				else
-					enemy.life = enemy.life - 1
-				end
-				table.remove(activeBulletsOnScreen, j)
-			end
-
-			if bullet.y < 0 then
-				table.remove(activeBulletsOnScreen, j)
-			end
-		end
-
-		if CheckCollision(enemy.x, enemy.y, enemy.img:getWidth(), enemy.img:getHeight(),
-						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
-		and (player.life > 0) then
-			currentEnemiesAlive = currentEnemiesAlive - 1
-			table.remove(activeEnemiesOnScreen, i)
-			player.life = player.life - 1
-		end
-	end
-
-	--
-	-- coalision with enemy bullets
-	for i, bullet in ipairs(activeEnemyBulletsOnScreen) do
-		if CheckCollision(player.x,player.y,player.img:getWidth(), player.img:getHeight(),
-						   bullet.x,bullet.y,bullet.img:getWidth(),bullet.img:getHeight()) then
-			player.life = player.life - 1
-			table.remove(activeEnemyBulletsOnScreen,i)
-		end
-	end
-	--
-
-	-- updating position of powerup
-	for i,powerUp in ipairs(activePowerupOnScreen) do
-		powerUp.y = powerUp.y + (150*love.timer.getDelta())
-		if powerUp.y > love.window.getHeight() - 40 then
-			table.remove(activePowerupOnScreen,i)
-		end
-	end
-
-	-- coalision of powerups
-	for i,powerUp in ipairs(activePowerupOnScreen) do
-		if CheckCollision(powerUp.x,powerUp.y,powerUp.img:getWidth(),powerUp.img:getHeight(),
-						  player.x, player.y, player.img:getWidth(), player.img:getHeight()) 
-			and isAlive then
-			table.remove(activePowerupOnScreen,i)
-			CheckPowerUp(powerUp.class)
-			--player.life = player.life + 1
-			powerUpSound:play()
-		end
-	end
-end
-
--- Checks for colision of 2 Enteties
--- Returns true if two boxes overlap, false if they don't
--- x1,y1 are the left-top coords of the first box, while w1,h1 are its width and height
--- x2,y2,w2 & h2 are the same, but for the second box
-function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
-  return x1 < x2+w2 and
-         x2 < x1+w1 and
-         y1 < y2+h2 and
-         y2 < y1+h1
-end
----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
--- DESTROY/CREATE enteties -------------------------------------------------------------------------------------------------------------------------------
-
-function CheckBullets(dt)
-	for i, bullet in ipairs(activeBulletsOnScreen) do
-		bullet.y = bullet.y - (350 * dt)
-	  	-- remove activeBulletsOnScreen when they pass off the screen	
-	  	if bullet.y < 0 then 
-			table.remove(activeBulletsOnScreen, i)
-		end
-	end
-end
-
-function CheckEnemyBullets(dt)
-	for i,bullet in ipairs(activeEnemyBulletsOnScreen) do
-		bullet.y = bullet.y + (enemySpeed*3*dt)
-		if bullet.y < 0 then 
-			table.remove(activeEnemyBulletsOnScreen,i)
-		end
-	end
-end
-
 
 
 function CreateEnemy( dt )
@@ -455,28 +303,3 @@ end
 
 
 
-
-
--- SCORE ------------------------------------------------------------------
--- needs fixing
-function WriteHighscore( score )
-	--bin/highscore/
-	local file =assert(io.open("bin\\highscore\\highscore.txt","w"),"Error while opening file :(")
-	file:write(score)
-	file:close()
-	return true
-end	
-
-
-function LoadHighscore()
-	--C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/
-	local file =assert(io.open("C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/bin/highscore/highscore.txt","r"),"Error while opening file :(")
-	local line = file:read()
-	file:close()
-	if line ~= nil then
-		return tonumber(line)
-	else
-		return 0
-	end
-end
------------------------------------------------------------------------

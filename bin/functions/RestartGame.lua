@@ -1,12 +1,26 @@
 -- Resets game
 function restartGame()
 
+
+	player.shieldImg = playerShieldImg
+    player.img = imagesPlayerBasic[2]
+    player.bullet = imagesBulletBasic[2]
+    backgroundImg = backgroundImges[1]
+
 	-- reset timers
-	canShootTimer = SHOOT_TIMER
 	createEnemyTimer = ENEMY_TIMER
-	-- moveing player back to default position
+
+	-- moving player back to default position and reseting player opt
 	player.x = 200
 	player.y = 690
+	player.speed = 350
+	player.bulletStrength = 1
+	player.bulletDamage = 1.0
+	player.life = 3
+	player.shield = false
+	player.shieldDuration = 0
+
+
 	-- reseting game state
 
 	enemySpeed = 100		-- speed of what aircrafts are moving
@@ -15,15 +29,15 @@ function restartGame()
 	activePowerupOnScreen = {}
 	activeBulletsOnScreen = {}
 
-	backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
-	
+	enemyImg = imagesEnemies[1] 
+	enemyBullet = love.graphics.newImage('assets/Space Shooter/PNG/Lasers/laserRed11.png')
+
 	score = 0
 	isAlive = true
-	player.life = 3
 	scoreUpdate = true
+	bonusScore = false
 
 	currentEnemiesAlive = 0
 	currentWaveCount = 0
-
 	level = 0
 end

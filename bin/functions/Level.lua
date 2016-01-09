@@ -8,13 +8,35 @@ function ChangeLevel()
 	if changeLevel then
 		changeLevel = false
 		
-		local picNum = math.mod(currentLevel-1,3)+1		
+		local picNum = math.mod(currentLevel-1,table.getn(backgroundImges))+1		
 
 		backgroundImg = backgroundImges[picNum] 
-	 	enemyImg = imagesEnemies[currentLevel]
+
+		picNum = math.mod(currentLevel-1,table.getn(imagesEnemies))+1
+	 	enemyImg = imagesEnemies[picNum]
 
 
 	 	activeEnemiesOnScreen = {}
 	 	currentEnemiesAlive = 0
 	end
+end
+
+function IncreseDif()
+	local boss = 5
+	if currentWaveCount > 5 and (score >= ((level)*25)) then -- 5 , 25
+		level = level + 1
+		powerUp()
+		if enemySpeed < 300 then
+			enemySpeed = enemySpeed + 15
+		end
+		currentWaveCount = 0 
+		if player.speed < 400 then
+			player.speed = player.speed + 10
+		end
+	end
+	-- if level == boss then
+	-- 	BossLevel()
+	-- 	boss = 10
+	-- end
+
 end

@@ -5,8 +5,20 @@ function loadImages()
 		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupBlue_shield.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/star_gold.png'),
 		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/powerupBlue_bolt.png'),
-		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/pill_blue.png')
+		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/bolt_gold.png'),
+		love.graphics.newImage('assets/Space Shooter/PNG/Power-ups/star_bronze.png')
 	}
+
+	--
+	-- 1. Shield
+	-- 2. Life
+	-- 3. Weapon	
+	-- 4. Damage
+	-- 5. Bonus Score
+
+
+
+	--
 	---------------------------------------------------------------------------------
 	backgroundImges = {
 		love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png'),
@@ -71,11 +83,15 @@ function loadImages()
 		love.graphics.newImage('assets/Space Shooter/PNG/UI/numeralX.png')
 	}
 
+
+	playerShieldImg = love.graphics.newImage('assets/Space Shooter/PNG/Effects/shield1.png')
 	playerLifeImg = imagesLifeIcons[2]
 	enemyImg = imagesEnemies[1] 
 	enemyBullet = love.graphics.newImage('assets/Space Shooter/PNG/Lasers/laserRed11.png')
+
+	player.shieldImg = playerShieldImg
     player.img = imagesPlayerBasic[2]
     player.bullet = imagesBulletBasic[2]
-    backgroundImg = love.graphics.newImage('assets/Space Shooter/Backgrounds/blue.png')
+    backgroundImg = backgroundImges[1]
     return true
 end
