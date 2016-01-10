@@ -186,6 +186,7 @@ function BossWave()
 					 enemyMoveInOneDirection = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
     enemySpeed=100
+    activeBulletsOnScreen = {}
     
 
     
