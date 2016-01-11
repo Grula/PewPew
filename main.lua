@@ -77,7 +77,7 @@ function love.load(arg)
 	-- Loads CONFIGS
 	highscore = LoadHighscore()
 	if( highscore ~= nil) then
-		print("highscore loaded")
+		print("Highscore loaded")
 	else
 		highscore = 0
 	end
@@ -177,7 +177,7 @@ function love.update(dt)
 
 
 	-- GAME RESTART ----------------------------------------
-	if (player.life == 0) and isAlive then
+	if (player.life < 1) and isAlive then
 		if score < highscore then
 			gameOverSound:play()
 		end
@@ -185,7 +185,7 @@ function love.update(dt)
 		isAlive = false
 		activeBulletsOnScreen = {}
 	end
-	if (player.life == 0) and love.keyboard.isDown('r') then
+	if (player.life < 1) and love.keyboard.isDown('r') then
 		-- remove all activeBulletsOnScreen and activeEnemiesOnScreen from screen
 		restartGame()
 	end
@@ -202,6 +202,7 @@ function love.draw(dt)
 
 
 	-- DRAWING PLAYER IF HE IS ALIVE AND SHOWING SCORE---
+		love.graphics.print("Level :"..level.." ",0,0)
     if (player.life > 0) then
 		love.graphics.draw(player.img, player.x, player.y)
 		love.graphics.print("Score :"..score.." ",0,love.graphics:getHeight()-15)
@@ -273,12 +274,21 @@ end
 
 function CreateEnemy( dt )
 
-	if currentEnemiesAlive <= 0 then
-		i = math.random(1,table.maxn(enemyWaves))
-		currentEnemiesAlive = enemyWaves[i]()
-		currentWaveCount = currentWaveCount + 1
+	-- currentEnemiesAlive alive enemies at the moment
+	-- Pravimo enemies ako ih je manje od 0 na ekranu
+	 if not bossWaveIsUp then 
+        if currentEnemiesAlive <= 0 then
+            i = math.random(1,table.maxn(enemyWaves))
+            currentEnemiesAlive = enemyWaves[i]()
+            currentWaveCount = currentWaveCount + 1
+        end
 	end
+	else if bossSpawned
+        bossWaveIsUp= true
+	end
+    
 
+	-- Racunamo njihovo pomeranje levo-desno
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
 		enemy.y = enemy.y + (enemySpeed * dt)
 		if enemy.enemyMoveInOneDirection then
@@ -293,6 +303,7 @@ function CreateEnemy( dt )
 			end
 		end
 
+		-- Uniste se ako predju preko screen width
 		if enemy.y > love.window.getHeight() - enemy.img:getHeight() - 10  then 
 			table.remove(activeEnemiesOnScreen, i)
 			currentEnemiesAlive = currentEnemiesAlive - 1

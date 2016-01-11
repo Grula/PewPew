@@ -31,8 +31,8 @@ end
 
 function EnemyShoot( ... )
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
-		local randomNumb = math.random(1,1000)
-		if randomNumb == 1 or randomNumb == 500 then
+		local randomNumb = math.random(1,3000)
+		if randomNumb == 17 or randomNumb == 409 then
 			newBullet = { x = enemy.x + (enemy.img:getWidth()/2 -20),
 					  y = enemy.y + 90,
 					  img = enemyBullet } 
