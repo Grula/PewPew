@@ -86,8 +86,8 @@ function loadImages()
         love.graphics.newImage('assets/Space Shooter/PNG/ufoBlue.png'),
         love.graphics.newImage('assets/Space Shooter/PNG/ufoGreen.png'),
         love.graphics.newImage('assets/Space Shooter/PNG/ufoRed.png'),
-        love.graphics.newImage('assets/Space Shooter/PNG/ufoYellow.png'),
-        love.graphics.newImage('assets/Space Shooter/PNG/Lasers/LaserGreen10.png'),
+        love.graphics.newImage('assets/Space Shooter/PNG/ufoYellow.png')
+       
         
     }
 

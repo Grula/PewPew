@@ -177,16 +177,18 @@ end
 
 
 
-function BossWave()
-    --posle svaka tri levela dolazi boss i ide lijevo-desno
-    --i ide i nadolje,ali sve sporo
-    --i neka puca rakete
+function BossWave( dt )
+    
     newEnemy = { x = 0, y = 0,
 					 img = enemyImg, life = level - 1,
 					 enemyMoveInOneDirection = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
     enemySpeed=100
-    activeBulletsOnScreen = {}
+    --activeBulletsOnScreen = {}
+    --bonusScore = True
+    --currentEnemiesAlive = 0
+    -- bossBullet=love.graphics.newImage('assets/Space Shooter/PNG/Lasers/LaserGreen10.png')
+    --weaponUpdate = true
     
 
     
