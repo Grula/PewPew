@@ -273,12 +273,26 @@ end
 
 function CreateEnemy( dt )
 
+	-- currentEnemiesAlive alive enemies at the moment
+	-- Pravimo enemies ako ih je manje od 0 na ekranu
+	-- if not bossWaveIsUp then 
 	if currentEnemiesAlive <= 0 then
 		i = math.random(1,table.maxn(enemyWaves))
 		currentEnemiesAlive = enemyWaves[i]()
 		currentWaveCount = currentWaveCount + 1
 	end
+	--end
+	--elseif bossSpawned
 
+	-- boss
+
+	-- bossSpawned false
+	-- kada boss umre
+	-- bossWaveIsUp = false
+	--
+	--end
+
+	-- Racunamo njihovo pomeranje levo-desno
 	for i, enemy in ipairs(activeEnemiesOnScreen) do
 		enemy.y = enemy.y + (enemySpeed * dt)
 		if enemy.enemyMoveInOneDirection then
@@ -293,6 +307,7 @@ function CreateEnemy( dt )
 			end
 		end
 
+		-- Uniste se ako predju preko screen width
 		if enemy.y > love.window.getHeight() - enemy.img:getHeight() - 10  then 
 			table.remove(activeEnemiesOnScreen, i)
 			currentEnemiesAlive = currentEnemiesAlive - 1

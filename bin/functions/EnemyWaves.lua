@@ -179,6 +179,7 @@ end
 
 function BossWave( dt )
     
+    bossWaveIsUp = true
     newEnemy = { x = 0, y = 0,
 					 img = enemyImg, life = level - 1,
 					 enemyMoveInOneDirection = true}
@@ -188,7 +189,6 @@ function BossWave( dt )
     --bonusScore = True
     --currentEnemiesAlive = 0
     -- bossBullet=love.graphics.newImage('assets/Space Shooter/PNG/Lasers/LaserGreen10.png')
-    --weaponUpdate = true
     
 
     

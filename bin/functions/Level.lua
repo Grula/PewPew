@@ -22,10 +22,10 @@ function ChangeLevel()
 end
 
 function IncreseDif()
-	local boss = math.mod(level,2)
-	if boss == 0 then
-		bossLevel = true
-	end
+	-- local boss = math.mod(level,2)
+	-- if boss == 0 then
+	-- 	bossLevel = true
+	-- end
 	if currentWaveCount > 5 and (score >= ((level)*25))then -- and not bossLevel then -- 5 , 25
 		level = level + 1
 		powerUp()
@@ -37,8 +37,8 @@ function IncreseDif()
 			player.speed = player.speed + 10
 		end
 	end
-	if bossLevel then
-		BossWave()
-		print('bossLevel')
-	end
+	-- if bossLevel then
+	-- 	BossWave()
+	-- 	print('bossLevel')
+	-- end
 end
