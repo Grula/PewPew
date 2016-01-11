@@ -15,7 +15,7 @@ require("bin.functions.Collision")
 
 
 score = 0
-
+--test
 -- ENTETIES 
 -- player cant have more then 9 lives
 player = { x = 200, y = 690,
