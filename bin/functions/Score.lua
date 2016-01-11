@@ -17,26 +17,55 @@ end
 -- highscore
 
 
--- SCORE ------------------------------------------------------------------
--- needs fixing
+-- SCORE writing and loading ------------------------------------------------------------------
 function WriteHighscore( score )
-	--bin/highscore/
-	local file =assert(io.open("bin\\highscore\\highscore.txt","w"),"Error while opening file :(")
-	file:write(score)
-	file:close()
-	return true
+	if love.filesystem.isFused() then
+	    local dir = love.filesystem.getSourceBaseDirectory()
+	    local success = love.filesystem.mount(dir, "Pew Pew")
+	 
+	    if success then
+	       local file =assert(io.open("Pew Pew/bin/highscore/highscore.tx","w"),"Error while opening file :(")
+	       	file:write(score)
+			file:close()
+			return true
+	    end
+	else
+		local path = love.filesystem.getSourceBaseDirectory()
+		local file = assert(io.open(path.."/Pew Pew/bin/highscore/highscore.txt","w"),"Error while opening file :(")
+		if (file:write(score)) then
+			file:close()
+			return true
+		else
+			return false
+		end
+	end
 end	
 
 
 function LoadHighscore()
-	--C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/
-	local file =assert(io.open("C:/Users/grula/Desktop/Uni/Projects/LUA/projects/Pew Pew/bin/highscore/highscore.txt","r"),"Error while opening file :(")
-	local line = file:read()
-	file:close()
-	if line ~= nil then
-		return tonumber(line)
+	if love.filesystem.isFused() then
+	    local dir = love.filesystem.getSourceBaseDirectory()
+	    local success = love.filesystem.mount(dir, "Pew Pew")
+	    if success then
+	    	local file =assert(io.open("Pew Pew/bin/highscore/highscore.txt","r"),"Error while opening file :(")
+			local line = file:read()
+			file:close()
+			if line ~= nil then
+				return tonumber(line)
+			else
+				return 0
+			end
+	    end
 	else
-		return 0
+		local path = love.filesystem.getSourceBaseDirectory()
+		local file = assert(io.open(path.."/Pew Pew/bin/highscore/highscore.txt"),"Error while opening file :(")
+		local line = file:read()
+		file:close()
+		if line ~= nil then
+			return tonumber(line)
+		else
+			return 0
+		end
 	end
 end
 -----------------------------------------------------------------------

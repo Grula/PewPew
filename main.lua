@@ -77,7 +77,7 @@ function love.load(arg)
 	-- Loads CONFIGS
 	highscore = LoadHighscore()
 	if( highscore ~= nil) then
-		print("highscore loaded")
+		print("Highscore loaded")
 	else
 		highscore = 0
 	end
@@ -177,7 +177,7 @@ function love.update(dt)
 
 
 	-- GAME RESTART ----------------------------------------
-	if (player.life == 0) and isAlive then
+	if (player.life < 1) and isAlive then
 		if score < highscore then
 			gameOverSound:play()
 		end
@@ -185,7 +185,7 @@ function love.update(dt)
 		isAlive = false
 		activeBulletsOnScreen = {}
 	end
-	if (player.life == 0) and love.keyboard.isDown('r') then
+	if (player.life < 1) and love.keyboard.isDown('r') then
 		-- remove all activeBulletsOnScreen and activeEnemiesOnScreen from screen
 		restartGame()
 	end
@@ -202,6 +202,7 @@ function love.draw(dt)
 
 
 	-- DRAWING PLAYER IF HE IS ALIVE AND SHOWING SCORE---
+		love.graphics.print("Level :"..level.." ",0,0)
     if (player.life > 0) then
 		love.graphics.draw(player.img, player.x, player.y)
 		love.graphics.print("Score :"..score.." ",0,love.graphics:getHeight()-15)
