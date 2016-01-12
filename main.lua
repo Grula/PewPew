@@ -1,4 +1,4 @@
-debug = true
+debug = false
 
 
 require("bin.functions.RestartGame")	 -- Function for restarting game 		TODO

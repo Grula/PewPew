@@ -22,16 +22,32 @@ function WriteHighscore( score )
 	if love.filesystem.isFused() then
 	    local dir = love.filesystem.getSourceBaseDirectory()
 	    local success = love.filesystem.mount(dir, "Pew Pew")
-	 
 	    if success then
-	       local file =assert(io.open("Pew Pew/bin/highscore/highscore.tx","w"),"Error while opening file :(")
-	       	file:write(score)
-			file:close()
-			return true
+	       	local file = io.open("/bin/highscore/highscore.txt","w")
+	       	if file ~= nil then
+		       	file:write(score)
+				file:close()
+				return true
+			else
+				ok = love.filesystem.createDirectory("bin")
+				if ok then
+					ok = love.filesystem.createDirectory("/bin/highscore")
+					if ok then
+						file = love.filesystem.newFile("/bin/highscore/highscore.txt")
+						file:open('w')
+						if file~=nil then
+							file:write(score)
+							file:close()
+							return true
+						end
+					end
+				end
+			end	
 	    end
+	    return false
 	else
 		local path = love.filesystem.getSourceBaseDirectory()
-		local file = assert(io.open(path.."/Pew Pew/bin/highscore/highscore.txt","w"),"Error while opening file :(")
+		local file = io.open(path.."/Pew Pew/bin/highscore/highscore.txt","w")
 		if (file:write(score)) then
 			file:close()
 			return true
@@ -47,7 +63,23 @@ function LoadHighscore()
 	    local dir = love.filesystem.getSourceBaseDirectory()
 	    local success = love.filesystem.mount(dir, "Pew Pew")
 	    if success then
-	    	local file =assert(io.open("Pew Pew/bin/highscore/highscore.txt","r"),"Error while opening file :(")
+	    	local file =io.open("/bin/highscore/highscore.txt","r")
+			if file ~= nil then
+				local line = file:read()
+				file:close()
+				if line ~= nil then
+					return tonumber(line)
+				else
+					return 0
+				end
+			else
+				return 0
+			end
+	    end
+	else
+		local path = love.filesystem.getSourceBaseDirectory()
+		local file = io.open(path.."/Pew Pew/bin/highscore/highscore.txt","r")
+		if file ~= nil then
 			local line = file:read()
 			file:close()
 			if line ~= nil then
@@ -55,17 +87,8 @@ function LoadHighscore()
 			else
 				return 0
 			end
-	    end
-	else
-		local path = love.filesystem.getSourceBaseDirectory()
-		local file = assert(io.open(path.."/Pew Pew/bin/highscore/highscore.txt"),"Error while opening file :(")
-		local line = file:read()
-		file:close()
-		if line ~= nil then
-			return tonumber(line)
-		else
-			return 0
 		end
+		return -1
 	end
 end
 -----------------------------------------------------------------------

@@ -185,8 +185,16 @@ function BossWave( dt )
 					 enemyMoveInOneDirection = true}
 		table.insert(activeEnemiesOnScreen, newEnemy)
     enemySpeed=100
+<<<<<<< HEAD
     activeBulletsOnScreen = {}
    -- bonusScore = True !za ovo nisam sigurna!
     currentEnemiesAlive = 0
      bossBullet=love.graphics.newImage('assets/Space Shooter/PNG/Lasers/LaserGreen10.png')
+=======
+    --activeBulletsOnScreen = {}
+    --bonusScore = True
+    --currentEnemiesAlive = 0
+    -- bossBullet=love.graphics.newImage('assets/Space Shooter/PNG/Lasers/LaserGreen10.png')
+    
+>>>>>>> origin/master
 end
