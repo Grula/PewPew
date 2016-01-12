@@ -190,8 +190,4 @@ function BossWave( dt )
     --currentEnemiesAlive = 0
     -- bossBullet=love.graphics.newImage('assets/Space Shooter/PNG/Lasers/LaserGreen10.png')
     
-
-    
-    
-	
 end
