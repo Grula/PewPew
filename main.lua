@@ -21,7 +21,7 @@ score = 0
 player = { x = 200, y = 690,
 		   speed = 350,
 		   img = nil,
-		   bullet = nil, bulletStrength = 1, bulletDamage = 1.0,
+		   bullet = nil, bulletStrength = 0, bulletDamage = 1.0,
 		   life = 3,
 		   shield = false, shieldDuration = 0, shieldImg = nil
 		 }

@@ -9,7 +9,7 @@ function loadAudio()
 	
 	pewPewGameSound = love.audio.newSource(gameSounds[1])
 	pewPewGameSound:setLooping()
-	pewPewGameSound:setVolume(0.2)
+	pewPewGameSound:setVolume(1)
 
 	bulletSound = love.audio.newSource('assets/sound/laser4.ogg')
 	bulletSound:setVolume(1)

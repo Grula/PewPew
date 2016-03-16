@@ -24,6 +24,7 @@ function CheckCollisionOfAllEnteties( ... )
 						score = score + 1
 					end
 				else
+					--pop
 					enemy.life = enemy.life - player.bulletDamage
 				end
 				table.remove(activeBulletsOnScreen, j)
